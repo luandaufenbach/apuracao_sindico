@@ -1,0 +1,778 @@
+{
+  "id": "b9e1504e-c007-4007-bc0f-cae6fc5aa7a2",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.apartamento": {
+      "name": "apartamento",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "empreendimento_id": {
+          "name": "empreendimento_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bloco": {
+          "name": "bloco",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "numero": {
+          "name": "numero",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rotulo": {
+          "name": "rotulo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "apartamento_empreendimento_id_empreendimento_id_fk": {
+          "name": "apartamento_empreendimento_id_empreendimento_id_fk",
+          "tableFrom": "apartamento",
+          "tableTo": "empreendimento",
+          "columnsFrom": [
+            "empreendimento_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "apartamento_empreendimento_id_bloco_numero_unique": {
+          "name": "apartamento_empreendimento_id_bloco_numero_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "empreendimento_id",
+            "bloco",
+            "numero"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.candidato": {
+      "name": "candidato",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "eleicao_id": {
+          "name": "eleicao_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "apartamento_id": {
+          "name": "apartamento_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "foto": {
+          "name": "foto",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposta": {
+          "name": "proposta",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ordem": {
+          "name": "ordem",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "candidato_eleicao_id_eleicao_id_fk": {
+          "name": "candidato_eleicao_id_eleicao_id_fk",
+          "tableFrom": "candidato",
+          "tableTo": "eleicao",
+          "columnsFrom": [
+            "eleicao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "candidato_apartamento_id_apartamento_id_fk": {
+          "name": "candidato_apartamento_id_apartamento_id_fk",
+          "tableFrom": "candidato",
+          "tableTo": "apartamento",
+          "columnsFrom": [
+            "apartamento_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.comprador": {
+      "name": "comprador",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "apartamento_id": {
+          "name": "apartamento_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "documento": {
+          "name": "documento",
+          "type": "varchar(14)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "comprador_documento": {
+          "name": "comprador_documento",
+          "columns": [
+            {
+              "expression": "documento",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "comprador_apartamento_id_apartamento_id_fk": {
+          "name": "comprador_apartamento_id_apartamento_id_fk",
+          "tableFrom": "comprador",
+          "tableTo": "apartamento",
+          "columnsFrom": [
+            "apartamento_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.eleicao": {
+      "name": "eleicao",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "empreendimento_id": {
+          "name": "empreendimento_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "codigo": {
+          "name": "codigo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "titulo": {
+          "name": "titulo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "status_eleicao",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'rascunho'"
+        },
+        "teste": {
+          "name": "teste",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "aberta_em": {
+          "name": "aberta_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "encerrada_em": {
+          "name": "encerrada_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "eleicao_empreendimento_id_empreendimento_id_fk": {
+          "name": "eleicao_empreendimento_id_empreendimento_id_fk",
+          "tableFrom": "eleicao",
+          "tableTo": "empreendimento",
+          "columnsFrom": [
+            "empreendimento_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "eleicao_codigo_unique": {
+          "name": "eleicao_codigo_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "codigo"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.empreendimento": {
+      "name": "empreendimento",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.log_auditoria": {
+      "name": "log_auditoria",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigserial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "eleicao_id": {
+          "name": "eleicao_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "usuario_id": {
+          "name": "usuario_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "acao": {
+          "name": "acao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "alvo": {
+          "name": "alvo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "motivo": {
+          "name": "motivo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dados": {
+          "name": "dados",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "log_auditoria_eleicao_id_eleicao_id_fk": {
+          "name": "log_auditoria_eleicao_id_eleicao_id_fk",
+          "tableFrom": "log_auditoria",
+          "tableTo": "eleicao",
+          "columnsFrom": [
+            "eleicao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "log_auditoria_usuario_id_usuario_admin_id_fk": {
+          "name": "log_auditoria_usuario_id_usuario_admin_id_fk",
+          "tableFrom": "log_auditoria",
+          "tableTo": "usuario_admin",
+          "columnsFrom": [
+            "usuario_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.situacao_apartamento": {
+      "name": "situacao_apartamento",
+      "schema": "",
+      "columns": {
+        "eleicao_id": {
+          "name": "eleicao_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "apartamento_id": {
+          "name": "apartamento_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tentativas_falhas": {
+          "name": "tentativas_falhas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "bloqueado": {
+          "name": "bloqueado",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "situacao_apartamento_eleicao_id_eleicao_id_fk": {
+          "name": "situacao_apartamento_eleicao_id_eleicao_id_fk",
+          "tableFrom": "situacao_apartamento",
+          "tableTo": "eleicao",
+          "columnsFrom": [
+            "eleicao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "situacao_apartamento_apartamento_id_apartamento_id_fk": {
+          "name": "situacao_apartamento_apartamento_id_apartamento_id_fk",
+          "tableFrom": "situacao_apartamento",
+          "tableTo": "apartamento",
+          "columnsFrom": [
+            "apartamento_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "situacao_apartamento_eleicao_id_apartamento_id_pk": {
+          "name": "situacao_apartamento_eleicao_id_apartamento_id_pk",
+          "columns": [
+            "eleicao_id",
+            "apartamento_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.usuario_admin": {
+      "name": "usuario_admin",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "senha_hash": {
+          "name": "senha_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "papel": {
+          "name": "papel",
+          "type": "papel_admin",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ativo": {
+          "name": "ativo",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "usuario_admin_email_unique": {
+          "name": "usuario_admin_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.voto": {
+      "name": "voto",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "eleicao_id": {
+          "name": "eleicao_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "apartamento_id": {
+          "name": "apartamento_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "candidato_id": {
+          "name": "candidato_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "comprador_id": {
+          "name": "comprador_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "documento": {
+          "name": "documento",
+          "type": "varchar(14)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "origem": {
+          "name": "origem",
+          "type": "origem_voto",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "comprovante": {
+          "name": "comprovante",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "status_voto",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'valido'"
+        },
+        "criado_em": {
+          "name": "criado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "um_voto_por_apto": {
+          "name": "um_voto_por_apto",
+          "columns": [
+            {
+              "expression": "eleicao_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "apartamento_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"voto\".\"status\" = 'valido'",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "voto_eleicao_id_eleicao_id_fk": {
+          "name": "voto_eleicao_id_eleicao_id_fk",
+          "tableFrom": "voto",
+          "tableTo": "eleicao",
+          "columnsFrom": [
+            "eleicao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "voto_apartamento_id_apartamento_id_fk": {
+          "name": "voto_apartamento_id_apartamento_id_fk",
+          "tableFrom": "voto",
+          "tableTo": "apartamento",
+          "columnsFrom": [
+            "apartamento_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "voto_candidato_id_candidato_id_fk": {
+          "name": "voto_candidato_id_candidato_id_fk",
+          "tableFrom": "voto",
+          "tableTo": "candidato",
+          "columnsFrom": [
+            "candidato_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "voto_comprador_id_comprador_id_fk": {
+          "name": "voto_comprador_id_comprador_id_fk",
+          "tableFrom": "voto",
+          "tableTo": "comprador",
+          "columnsFrom": [
+            "comprador_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "voto_comprovante_unique": {
+          "name": "voto_comprovante_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "comprovante"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.origem_voto": {
+      "name": "origem_voto",
+      "schema": "public",
+      "values": [
+        "documento",
+        "mesa"
+      ]
+    },
+    "public.papel_admin": {
+      "name": "papel_admin",
+      "schema": "public",
+      "values": [
+        "operador",
+        "god"
+      ]
+    },
+    "public.status_eleicao": {
+      "name": "status_eleicao",
+      "schema": "public",
+      "values": [
+        "rascunho",
+        "aberta",
+        "encerrada",
+        "publicada"
+      ]
+    },
+    "public.status_voto": {
+      "name": "status_voto",
+      "schema": "public",
+      "values": [
+        "valido",
+        "anulado"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

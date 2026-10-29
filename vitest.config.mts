@@ -15,5 +15,8 @@ export default defineConfig({
   },
   test: {
     include: ["tests/unit/**/*.test.ts"],
+    // Os testes de regras usam o banco remoto (Neon).
+    testTimeout: 30_000,
+    hookTimeout: 30_000,
   },
 });
