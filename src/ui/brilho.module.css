@@ -1,0 +1,45 @@
+/* Glow do Lumen (components/surfaces/Glow.jsx): luz que nasce do escuro, com
+   grão. Um por tela; o texto fica sobre a parte escura do gradiente. */
+.brilho {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--black);
+}
+.camada,
+.grao {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.grao {
+  background: var(--texture-grain);
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+}
+
+/* Horizonte: sobe da borda de baixo. */
+.horizonte .camada {
+  background: var(--gradient-horizon);
+}
+/* Halo: arco que desce do topo. */
+.halo .camada {
+  background: var(--gradient-halo);
+}
+/* Grade: linhas de 40 px com luz azul no topo, apagando nas bordas. */
+.grade .camada {
+  background:
+    var(--texture-grid),
+    radial-gradient(
+      70% 55% at 50% 0%,
+      rgba(41, 141, 255, 0.45),
+      rgba(12, 61, 128, 0.25) 45%,
+      transparent 75%
+    );
+  background-size:
+    var(--texture-grid-size),
+    100% 100%;
+  -webkit-mask: radial-gradient(80% 70% at 50% 40%, #000, transparent);
+  mask: radial-gradient(80% 70% at 50% 40%, #000, transparent);
+}

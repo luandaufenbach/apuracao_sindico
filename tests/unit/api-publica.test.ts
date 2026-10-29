@@ -462,6 +462,7 @@ describe("GET /api/e/[codigo]/telao", () => {
   it("conta apartamentos que votaram", async () => {
     const c = await preparar();
     expect((await api.telao(c.codigo)).corpo).toEqual({
+      status: "aberta",
       totalApartamentos: 6,
       votaram: 0,
     });
@@ -473,6 +474,7 @@ describe("GET /api/e/[codigo]/telao", () => {
       await api.votar(c.codigo, { token, candidatoId: c.candidatos[0] });
     }
     expect((await api.telao(c.codigo)).corpo).toEqual({
+      status: "aberta",
       totalApartamentos: 6,
       votaram: 2,
     });
@@ -601,14 +603,17 @@ describe("R11: resultado só com a eleição publicada", () => {
     }
 
     const aberta = await api.telao(c.codigo);
+    expect(aberta.corpo.status).toBe("aberta");
     expect(aberta.corpo).not.toHaveProperty("resultado");
     await mudarStatus(c, "encerrada");
     const encerrada = await api.telao(c.codigo);
+    expect(encerrada.corpo.status).toBe("encerrada");
     expect(encerrada.corpo).not.toHaveProperty("resultado");
     expect(JSON.stringify(encerrada.corpo)).not.toContain("Candidato");
 
     await mudarStatus(c, "publicada");
     expect((await api.telao(c.codigo)).corpo).toEqual({
+      status: "publicada",
       totalApartamentos: 6,
       votaram: 3,
       resultado: [
@@ -621,6 +626,7 @@ describe("R11: resultado só com a eleição publicada", () => {
   it("eleição em rascunho também não mostra resultado", async () => {
     const c = await preparar("rascunho");
     expect((await api.telao(c.codigo)).corpo).toEqual({
+      status: "rascunho",
       totalApartamentos: 6,
       votaram: 0,
     });

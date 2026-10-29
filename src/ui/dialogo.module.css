@@ -1,0 +1,93 @@
+/* Dialog do Lumen (components/feedback/Dialog.jsx), no <dialog> nativo:
+   centralizado no desktop, bottom sheet no celular. */
+.dialogo {
+  width: 100%;
+  max-width: 440px;
+  max-height: calc(100dvh - 48px);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sheet);
+  background: var(--surface-1);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-overlay);
+  font-family: var(--font-sans);
+}
+.dialogo[open] {
+  animation: entrar var(--duration-slow) var(--ease-emphasized);
+}
+/* ::backdrop não herda variáveis em navegadores mais antigos: valores fixos. */
+.dialogo::backdrop {
+  background: rgba(0, 0, 0, 0.72);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+}
+.alca {
+  display: none;
+  width: 36px;
+  height: 4px;
+  margin: -8px auto 0;
+  border-radius: var(--radius-full);
+  background: var(--border-strong);
+}
+.titulo {
+  font-size: var(--fs-h5);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-title);
+}
+.descricao {
+  margin-top: 8px;
+  font-size: var(--fs-body-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+.rodape {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+}
+@keyframes subir {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@media (max-width: 639px) {
+  .dialogo {
+    max-width: none;
+    max-height: 92dvh;
+    margin: auto 0 0;
+    border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .dialogo[open] {
+    animation-name: subir;
+  }
+  .conteudo {
+    padding: 16px 20px 20px;
+  }
+  .alca {
+    display: block;
+    margin-top: 0;
+  }
+  /* Ações empilhadas, com a principal embaixo, perto do polegar. */
+  .rodape {
+    flex-direction: column-reverse;
+  }
+  .rodape > * {
+    width: 100%;
+  }
+}

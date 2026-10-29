@@ -230,7 +230,7 @@ CREATE TABLE log_auditoria (
 | GET | `/api/e/[codigo]/apartamentos/[id]/dica` | → `{ dicas: [{ tipo: "cpf", prefixo: "126" }] }` |
 | POST | `/api/e/[codigo]/verificar` | `{ apartamentoId, documento }` → `{ ok: true, token }` ou `{ ok: false, erro, tentativasRestantes?, sugestoes? }` |
 | POST | `/api/e/[codigo]/votar` | `{ token, candidatoId }` → `{ comprovante, horario, proximos? }` |
-| GET | `/api/e/[codigo]/telao` | → `{ totalApartamentos, votaram, resultado? }` |
+| GET | `/api/e/[codigo]/telao` | → `{ status, totalApartamentos, votaram, resultado? }` |
 
 - `erro`: `documento_invalido` · `nao_confere` · `outro_apto` · `bloqueado` · `ja_votou` · `eleicao_fechada`.
 - `token`: JWT assinado com `jose`, válido por 10 min, com `eleicaoId`, `apartamentoId` e `compradorId`.

@@ -1,0 +1,350 @@
+/* Telão: TV ou projetor na horizontal, lido de longe. As medidas seguem a
+   altura da tela (vh), com piso em px para não sumir numa tela pequena. */
+.fundo {
+  min-height: 100dvh;
+}
+.telao {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(20px, 4vh, 56px);
+  min-height: 100dvh;
+  padding: clamp(20px, 5vh, 64px) clamp(20px, 4.5vw, 96px);
+}
+
+/* --- Topo -------------------------------------------------------------- */
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 1.8vh, 24px);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.selos {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.45em 0.8em;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.status::before {
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: var(--radius-full);
+  background: currentColor;
+}
+.statusAberta {
+  background: var(--status-success-bg);
+  color: var(--green-400);
+}
+.statusAberta::before {
+  animation: pulso 1.6s var(--ease-in-out) infinite;
+}
+.statusRascunho {
+  background: var(--status-warning-bg);
+  color: var(--amber-400);
+}
+.statusEncerrada {
+  background: var(--surface-3);
+  color: var(--text-secondary);
+}
+.statusPublicada {
+  background: var(--status-info-bg);
+  color: var(--blue-300);
+}
+.semConexao {
+  color: var(--amber-400);
+}
+@keyframes pulso {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* --- Meio: título, contagem e QR -------------------------------------- */
+.meio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(24px, 5vw, 120px);
+}
+.titulo {
+  font-size: clamp(32px, 7.5vh, 104px);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-display);
+}
+.contagem {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.6vh, 24px);
+  margin-top: clamp(20px, 5vh, 72px);
+}
+.numeros {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 0.25em;
+  font-size: clamp(64px, 20vh, 260px);
+  line-height: 0.9;
+  letter-spacing: var(--tracking-display);
+  font-variant-numeric: tabular-nums;
+}
+.total {
+  font-size: 0.42em;
+  color: var(--text-secondary);
+  letter-spacing: var(--tracking-headline);
+}
+.legenda {
+  font-size: clamp(18px, 3.6vh, 48px);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-title);
+  color: var(--text-secondary);
+}
+.barra {
+  position: relative;
+  height: clamp(12px, 2.4vh, 32px);
+  margin-top: clamp(8px, 2vh, 24px);
+  border-radius: var(--radius-xs);
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+  overflow: hidden;
+}
+.preenchido {
+  height: 100%;
+  border-radius: var(--radius-xs);
+  background: linear-gradient(90deg, var(--blue-700), var(--blue-500) 70%, var(--blue-200));
+  box-shadow: 0 0 24px rgba(41, 141, 255, 0.45);
+  transition: width var(--duration-slow) var(--ease-emphasized);
+}
+.porcentagem {
+  font-family: var(--font-mono);
+  font-size: clamp(14px, 2.4vh, 32px);
+  letter-spacing: var(--tracking-mono);
+  color: var(--text-tertiary);
+}
+
+.qrCaixa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 2vh, 24px);
+  width: clamp(220px, 44vh, 560px);
+}
+.qr {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-card);
+  box-shadow: var(--glow-md);
+}
+.qrTexto {
+  font-size: clamp(18px, 3.2vh, 40px);
+  letter-spacing: var(--tracking-title);
+  text-align: center;
+}
+.url {
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 2vh, 26px);
+  letter-spacing: var(--tracking-mono);
+  color: var(--text-secondary);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* No lugar do QR, com a votação encerrada e o resultado ainda fechado. */
+.aguardaResultado {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.6vh, 20px);
+  width: clamp(220px, 44vh, 560px);
+  padding: clamp(20px, 4vh, 48px);
+  border-radius: var(--radius-card);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-hairline);
+}
+.aguardaTitulo {
+  font-size: clamp(24px, 4.6vh, 60px);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-headline);
+}
+.aguardaTexto {
+  font-size: clamp(16px, 2.6vh, 34px);
+  line-height: var(--leading-snug);
+  color: var(--text-secondary);
+}
+
+/* --- Candidatos -------------------------------------------------------- */
+.candidatos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: clamp(12px, 2.4vh, 32px) clamp(16px, 2.5vw, 48px);
+  padding-top: clamp(16px, 3vh, 40px);
+  box-shadow: inset 0 1px 0 var(--border-subtle);
+}
+.candidato {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.6vw, 28px);
+  min-width: 0;
+}
+.foto,
+.iniciais {
+  flex-shrink: 0;
+  width: clamp(56px, 11vh, 140px);
+  height: clamp(56px, 11vh, 140px);
+  border-radius: var(--radius-card);
+}
+.foto {
+  object-fit: cover;
+  background: var(--surface-3);
+}
+.iniciais {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blue-600);
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: clamp(20px, 4vh, 52px);
+}
+.nome {
+  display: block;
+  font-size: clamp(20px, 3.8vh, 52px);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-title);
+}
+.apto {
+  display: block;
+  margin-top: 0.4em;
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 1.9vh, 24px);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* --- Resultado (só com a eleição publicada) ---------------------------- */
+.resultado {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(16px, 3.4vh, 48px);
+}
+.linha {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(12px, 2vw, 40px);
+}
+.linhaMeio {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.4vh, 18px);
+  min-width: 0;
+}
+.linhaNome {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: clamp(20px, 4.2vh, 56px);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-title);
+}
+.marca {
+  padding: 0.3em 0.55em;
+  border-radius: var(--radius-xs);
+  background: var(--blue-600);
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 0.4em;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.marcaEmpate {
+  background: var(--status-warning-bg);
+  color: var(--amber-400);
+}
+.barraVotos {
+  height: clamp(12px, 2.6vh, 34px);
+  border-radius: var(--radius-xs);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.barraVotos > span {
+  display: block;
+  height: 100%;
+  background: var(--gray-500);
+  transition: width var(--duration-slow) var(--ease-emphasized);
+}
+.vencedor .barraVotos > span {
+  background: linear-gradient(90deg, var(--blue-700), var(--blue-500) 70%, var(--blue-200));
+  box-shadow: 0 0 24px rgba(41, 141, 255, 0.45);
+}
+.votos {
+  min-width: 3.2em;
+  font-size: clamp(28px, 7vh, 96px);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-headline);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.votos small {
+  display: block;
+  margin-top: 0.3em;
+  font-family: var(--font-mono);
+  font-size: 0.36em;
+  letter-spacing: var(--tracking-mono);
+  color: var(--text-tertiary);
+}
+.rodapeResultado {
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 2vh, 26px);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* --- Estados ----------------------------------------------------------- */
+.centro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 100dvh;
+  padding: 24px;
+  text-align: center;
+}
+.centroTitulo {
+  font-size: clamp(28px, 6vh, 72px);
+  letter-spacing: var(--tracking-headline);
+}
+.centroTexto {
+  font-size: clamp(16px, 2.6vh, 32px);
+  color: var(--text-secondary);
+}
+
+/* Tela em pé (celular, monitor girado): uma coluna, QR embaixo. */
+@media (max-aspect-ratio: 1/1) {
+  .meio {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .qrCaixa,
+  .aguardaResultado {
+    justify-self: center;
+    width: min(80vw, 44vh, 560px);
+  }
+}

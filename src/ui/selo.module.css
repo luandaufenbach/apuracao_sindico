@@ -1,0 +1,55 @@
+/* Badge do Lumen (components/feedback/Badge.jsx): status sempre com rótulo. */
+.selo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0;
+  white-space: nowrap;
+  width: fit-content;
+}
+.ponto {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: currentColor;
+  flex-shrink: 0;
+}
+/* Ponto que pulsa: algo ao vivo (votação aberta, tela que se atualiza). */
+.vivo .ponto {
+  animation: pulso 1.6s var(--ease-in-out) infinite;
+}
+@keyframes pulso {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.neutro {
+  background: var(--surface-3);
+  color: var(--text-secondary);
+}
+.sucesso {
+  background: var(--status-success-bg);
+  color: var(--green-400);
+}
+.aviso {
+  background: var(--status-warning-bg);
+  color: var(--amber-400);
+}
+.perigo {
+  background: var(--status-danger-bg);
+  color: var(--red-400);
+}
+.info {
+  background: var(--status-info-bg);
+  color: var(--blue-300);
+}
+.info .ponto {
+  box-shadow: 0 0 6px var(--blue-500);
+}

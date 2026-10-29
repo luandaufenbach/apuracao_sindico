@@ -25,7 +25,10 @@ export async function GET(
         ),
       )
       .where(eq(apartamento.empreendimentoId, el.empreendimentoId));
-    if (el.status !== "publicada") return { totalApartamentos, votaram };
+    // O status vai junto para as telas acompanharem abertura e encerramento
+    // sem consultar a rota da eleição, que traz as fotos dos candidatos.
+    const { status } = el;
+    if (status !== "publicada") return { status, totalApartamentos, votaram };
 
     const resultado = await db
       .select({
@@ -45,6 +48,6 @@ export async function GET(
       .where(eq(candidato.eleicaoId, el.id))
       .groupBy(candidato.id)
       .orderBy(candidato.ordem, candidato.id);
-    return { totalApartamentos, votaram, resultado };
+    return { status, totalApartamentos, votaram, resultado };
   });
 }
