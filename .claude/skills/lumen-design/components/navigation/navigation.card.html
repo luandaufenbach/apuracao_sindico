@@ -1,0 +1,30 @@
+<!-- @dsCard group="Components" viewport="700x520" name="Navigation" subtitle="Navbar (mobile state at this width) · Tabs · Sidebar · BottomNav" -->
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{padding:20px}.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.col{display:flex;flex-direction:column;gap:14px}.lbl{font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-tertiary);width:72px;flex-shrink:0}</style></head>
+<body><div id="root"></div>
+<script type="text/babel">
+const { Navbar, Tabs, Sidebar, BottomNav, Wordmark } = window.LumenDesignSystem_12638a;
+
+function App() {
+  const [v, setV] = React.useState('overview');
+  const items = [{ value:'overview', label:'Overview', icon:'layout-grid' },{ value:'activity', label:'Activity', icon:'activity', badge:3 },{ value:'assets', label:'Assets', icon:'wallet' },{ value:'settings', label:'Settings', icon:'settings' }];
+  return <div className="col" style={{gap:18}}>
+    <div style={{boxShadow:'0 0 0 1px var(--border-subtle)'}}><Navbar variant="static" items={[{label:'Platform',children:[{label:'Overview'}]},{label:'Developers'}]} cta={{label:'Get started'}} /></div>
+    <div className="row" style={{gap:28}}><Tabs items={['Daily','Weekly','Monthly','All']} /><Tabs variant="segmented" items={[{value:'open',label:'Open',count:12},{value:'closed',label:'Closed'}]} /></div>
+    <Tabs variant="underline" items={['Overview','Activity','Research','Settings']} />
+    <div style={{display:'grid',gridTemplateColumns:'248px 1fr',gap:16,height:230}}>
+      <Sidebar header={<Wordmark size={20} />} value={v} onChange={setV} items={[...items.slice(0,2),{section:'Account'},...items.slice(2)]} style={{boxShadow:'0 0 0 1px var(--border-subtle)'}} />
+      <div style={{display:'flex',flexDirection:'column',justifyContent:'flex-end',boxShadow:'0 0 0 1px var(--border-subtle)',borderRadius:4,overflow:'hidden'}}>
+        <div style={{flex:1,display:'grid',placeItems:'center',fontFamily:'var(--font-mono)',fontSize:11,color:'var(--text-tertiary)',letterSpacing:'.06em'}}>MOBILE · SAME DESTINATIONS</div>
+        <BottomNav position="static" hideOnDesktop={false} value={v} onChange={setV} items={items} />
+      </div>
+    </div>
+  </div>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

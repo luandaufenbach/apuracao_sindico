@@ -1,0 +1,14 @@
+/* Lumen — minimal element defaults */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--bg-canvas);color:var(--text-primary);font-family:var(--font-sans);font-size:var(--fs-body);line-height:var(--leading-normal);letter-spacing:var(--tracking-body);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+h1,h2,h3,h4,h5,h6{margin:0;font-weight:var(--weight-regular);text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+a{color:var(--text-link);text-decoration:none;text-underline-offset:3px;transition:color var(--duration-fast) var(--ease-out)}
+a:hover{color:var(--text-link-hover);text-decoration:underline}
+:focus-visible{outline:2px solid var(--focus-ring);outline-offset:2px}
+::selection{background:var(--blue-500);color:var(--white)}
+code,kbd,samp,pre{font-family:var(--font-mono);font-size:.92em}
+img,svg,video{display:block;max-width:100%}
+button{font:inherit;color:inherit}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}}

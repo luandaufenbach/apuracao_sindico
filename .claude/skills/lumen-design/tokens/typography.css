@@ -1,0 +1,38 @@
+/* Lumen — typography tokens. Geist / Geist Mono stand in for TWK Everett / TWK Everett Mono. */
+:root{
+  --font-sans:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --font-mono:'Geist Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+  --font-display:var(--font-sans);
+
+  --weight-light:300;--weight-regular:400;--weight-medium:500;--weight-semibold:600;
+
+  /* Base size scale (px, from the reference type scale) */
+  --size-10:10px;--size-12:12px;--size-13:13px;--size-14:14px;--size-15:15px;--size-16:16px;--size-18:18px;
+  --size-24:24px;--size-30:30px;--size-32:32px;--size-44:44px;--size-54:54px;--size-68:68px;--size-80:80px;--size-96:96px;
+
+  --leading-none:1;--leading-tight:1.1;--leading-snug:1.2;--leading-normal:1.4;--leading-relaxed:1.55;
+
+  --tracking-display:-0.045em;  /* "kerning -5" */
+  --tracking-headline:-0.035em;
+  --tracking-title:-0.02em;     /* "kerning -2" */
+  --tracking-body:-0.01em;      /* "kerning -1" */
+  --tracking-none:0;
+  --tracking-mono:0.02em;       /* "kerning 2" */
+  --tracking-caps:0.06em;       /* uppercase mono eyebrows */
+
+  /* Role tokens — fluid between ~375px and ~1440px viewports */
+  --fs-display-lg:clamp(48px, 2.2rem + 5.2vw, 96px); /* @kind other */
+  --fs-display:clamp(44px, 2rem + 4.2vw, 80px); /* @kind other */
+  --fs-h1:clamp(40px, 1.9rem + 3.4vw, 68px); /* @kind other */
+  --fs-h2:clamp(34px, 1.7rem + 2.4vw, 54px); /* @kind other */
+  --fs-h3:clamp(30px, 1.6rem + 1.4vw, 44px); /* @kind other */
+  --fs-h4:clamp(24px, 1.3rem + .8vw, 32px); /* @kind other */
+  --fs-h5:24px;
+  --fs-h6:18px;
+  --fs-body-lg:18px;
+  --fs-body:16px;
+  --fs-body-sm:14px;
+  --fs-caption:13px;   /* mono caption / button label */
+  --fs-label:12px;     /* mono eyebrow, tab, table head */
+  --fs-micro:10px;     /* mono meta only — never for body or tap targets */
+}

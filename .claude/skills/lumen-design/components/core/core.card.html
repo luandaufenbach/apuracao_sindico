@@ -1,0 +1,25 @@
+<!-- @dsCard group="Components" viewport="700x400" name="Core" subtitle="Button · IconButton · Tag · IndexBadge · ArrowLink · Icon · Wordmark" -->
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{padding:20px}.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.col{display:flex;flex-direction:column;gap:14px}.lbl{font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-tertiary);width:72px;flex-shrink:0}</style></head>
+<body><div id="root"></div>
+<script type="text/babel">
+const { Button, IconButton, Tag, IndexBadge, ArrowLink, Icon, Wordmark } = window.LumenDesignSystem_12638a;
+
+function App() {
+  return <div className="col">
+    <div className="row"><span className="lbl">variant</span><Button iconRight="arrow-right">Get started</Button><Button variant="secondary">Read docs</Button><Button variant="outline">Outline</Button><Button variant="ghost">Ghost</Button><Button variant="danger">Delete</Button></div>
+    <div className="row"><span className="lbl">size</span><Button size="sm">Small</Button><Button size="md">Medium</Button><Button size="lg">Large</Button><Button size="md" iconLeft="download" variant="outline">With icon</Button></div>
+    <div className="row"><span className="lbl">state</span><Button disabled>Disabled</Button><Button loading>Submitting</Button><Button variant="secondary" disabled>Disabled</Button></div>
+    <div className="row"><span className="lbl">icon btn</span><IconButton icon="menu" label="Menu" /><IconButton icon="plus" label="Add" variant="primary" /><IconButton icon="arrow-up-right" label="Open" variant="inverse" /><IconButton icon="settings" label="Settings" variant="outline" /><IconButton icon="x" label="Close" variant="ghost" /><IconButton icon="plus" label="Expand" size="xs" /></div>
+    <div className="row"><span className="lbl">tag</span><Tag>Product criteria</Tag><Tag variant="accent" uppercase>New</Tag><Tag variant="subtle">Typography</Tag><Tag variant="outline" icon="calendar">15 Dec 2025</Tag><IndexBadge value={1} /><IndexBadge value={2} variant="solid" /><IndexBadge value="03" variant="inverse" size="lg" /></div>
+    <div className="row"><span className="lbl">link</span><ArrowLink href="#">Read docs</ArrowLink><ArrowLink icon="play">Watch the video</ArrowLink><ArrowLink tone="inverse" icon="arrow-up-right">Explorer</ArrowLink><ArrowLink tone="accent" icon="arrow-up-right">View on GitHub</ArrowLink></div>
+    <div className="row"><span className="lbl">icon</span>{['chart-line','wallet','rocket','infinity','layers','shield-check','code','globe','zap','bug','coins','landmark'].map(n => <Icon key={n} name={n} size={22} />)}<span style={{marginLeft:'auto'}}><Wordmark size={24} /></span></div>
+  </div>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>

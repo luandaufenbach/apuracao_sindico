@@ -1,0 +1,36 @@
+/* Lumen — spacing, radius, layout */
+:root{
+  --space-0:0;--space-px:1px;--space-0-5:2px;--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;
+  --space-6:24px;--space-8:32px;--space-10:40px;--space-12:48px;--space-16:64px;--space-20:80px;--space-24:96px;
+  --space-32:128px;--space-40:160px;
+
+  /* Section rhythm (fluid) */
+  --section-y:clamp(64px, 3rem + 6vw, 160px); /* @kind spacing */
+  --stack-y:clamp(24px, 1rem + 2vw, 48px); /* @kind spacing */
+
+  /* Radius — near-square, technical. Pills only for status dots/toggles. */
+  --radius-0:0;--radius-xs:2px;--radius-sm:4px;--radius-md:6px;--radius-lg:10px;--radius-full:9999px;
+  --radius-control:var(--radius-xs);
+  --radius-card:var(--radius-sm);
+  --radius-sheet:var(--radius-lg);
+
+  /* Layout */
+  --container-max:1280px;
+  --container-wide:1440px;
+  --container-text:680px;
+  --gutter:clamp(16px, 4vw, 40px); /* @kind spacing */
+  --grid-columns:12; /* @kind other */
+  --grid-gap:clamp(12px, 2vw, 24px); /* @kind spacing */
+  --nav-height:64px;
+  --nav-height-mobile:56px;
+  --sidebar-width:248px;
+  --tabbar-height:64px;
+
+  /* Breakpoints (reference values for JS / docs; CSS vars can't drive @media) */
+  --bp-sm:640px;--bp-md:768px;--bp-lg:1024px;--bp-xl:1280px;
+
+  /* Accessibility */
+  --hit-min:44px;     /* minimum touch target */
+  --control-sm:32px;--control-md:40px;--control-lg:48px;
+  --border-width:1px;
+}

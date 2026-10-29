@@ -1,0 +1,7 @@
+# Arquivos de terceiros, gerados ou mantidos à mão fora do Prettier.
+.claude/
+docs/
+src/ui/lumen/
+src/db/migrations/
+AGENTS.md
+package-lock.json

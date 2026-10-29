@@ -1,0 +1,92 @@
+/* Lumen — color tokens. Dark-first; light theme via [data-theme="light"]. */
+:root{
+  /* Blue — core brand scale. 500 is the signal blue; 600 is the accessible fill for white text (4.78:1). */
+  --blue-50:#EAF3FF;--blue-100:#D4E7FF;--blue-200:#A9CFFF;--blue-300:#7DB7FF;--blue-400:#52A0FF;
+  --blue-500:#298DFF;--blue-600:#1A6FE0;--blue-700:#1256B3;--blue-800:#0C3D80;--blue-900:#07244D;--blue-950:#041330;
+  /* Gray — cool slate neutrals (anchors #C3C8D0 / #6C788C). */
+  --white:#FFFFFF;
+  --gray-50:#F4F5F7;--gray-100:#E6E8EC;--gray-200:#C3C8D0;--gray-300:#A1A9B6;--gray-400:#858FA0;
+  --gray-500:#6C788C;--gray-600:#525C6D;--gray-700:#3A414E;--gray-800:#24282F;--gray-850:#1A1D22;
+  --gray-900:#111316;--gray-950:#0A0B0D;
+  --black:#000000;
+  /* Semantic hues — used sparingly, never decoratively. */
+  --green-400:#4ADE9B;--green-500:#1FC77E;--green-700:#0E7A4B;
+  --amber-400:#FFC44D;--amber-500:#FFB020;--amber-700:#9A6400;
+  --red-400:#FF7A7C;--red-500:#FF4D4F;--red-700:#B4232A;
+
+  /* ---- Semantic aliases (dark theme, default) ---- */
+  --bg-canvas:var(--black);
+  --surface-1:var(--gray-950);      /* cards on canvas */
+  --surface-2:var(--gray-900);      /* raised: accordion rows, inputs */
+  --surface-3:var(--gray-850);      /* hover / selected rows */
+  --surface-inverse:var(--white);
+  --surface-accent:var(--blue-500);
+  --surface-overlay:rgba(0,0,0,.72);
+
+  --border-subtle:rgba(255,255,255,.08);
+  --border-default:rgba(255,255,255,.14);
+  --border-strong:rgba(255,255,255,.28);
+  --border-accent:var(--blue-500);
+
+  --text-primary:var(--white);
+  --text-secondary:var(--gray-300);
+  --text-tertiary:var(--gray-500);
+  --text-inverse:var(--black);
+  --text-accent:var(--blue-500);
+  --text-on-accent:var(--white);
+  --text-link:var(--blue-500);
+  --text-link-hover:var(--blue-300);
+
+  --action-primary:var(--blue-600);
+  --action-primary-hover:var(--blue-500);
+  --action-primary-press:var(--blue-700);
+  --action-secondary:var(--white);
+  --action-secondary-hover:var(--gray-100);
+  --action-secondary-text:var(--black);
+  --action-ghost-hover:rgba(255,255,255,.08);
+
+  --focus-ring:var(--blue-400);
+
+  --status-success:var(--green-500);--status-success-bg:rgba(31,199,126,.12);
+  --status-warning:var(--amber-500);--status-warning-bg:rgba(255,176,32,.12);
+  --status-danger:var(--red-500);--status-danger-bg:rgba(255,77,79,.12);
+  --status-info:var(--blue-500);--status-info-bg:rgba(41,141,255,.12);
+
+  --data-1:var(--blue-500);--data-2:var(--blue-200);--data-3:var(--gray-400);--data-4:var(--blue-800);
+  --data-grid:rgba(255,255,255,.08);
+
+  color-scheme:dark;
+}
+
+[data-theme="light"]{
+  --bg-canvas:var(--white);
+  --surface-1:var(--gray-50);
+  --surface-2:var(--white);
+  --surface-3:var(--gray-100);
+  --surface-inverse:var(--black);
+  --surface-overlay:rgba(10,11,13,.48);
+
+  --border-subtle:rgba(10,11,13,.08);
+  --border-default:rgba(10,11,13,.14);
+  --border-strong:rgba(10,11,13,.32);
+
+  --text-primary:var(--black);
+  --text-secondary:var(--gray-600);
+  --text-tertiary:var(--gray-500);
+  --text-inverse:var(--white);
+  --text-accent:var(--blue-600);
+  --text-link:var(--blue-600);
+  --text-link-hover:var(--blue-700);
+
+  --action-primary:var(--blue-600);
+  --action-primary-hover:var(--blue-700);
+  --action-primary-press:var(--blue-800);
+  --action-secondary:var(--black);
+  --action-secondary-hover:var(--gray-800);
+  --action-secondary-text:var(--white);
+  --action-ghost-hover:rgba(10,11,13,.06);
+
+  --focus-ring:var(--blue-600);
+  --data-grid:rgba(10,11,13,.08);
+  color-scheme:light;
+}
