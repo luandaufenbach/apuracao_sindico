@@ -4,6 +4,8 @@ Cada fase roda numa sessão nova do Claude Code, aberta nesta pasta: um agente p
 
 Uma fase só termina quando o critério "Pronto quando" passa e `/code-review` não aponta bug.
 
+Quem abre a sessão de uma fase usa o esforço indicado no item **Agente**. O high basta para telas, cadastros, QA e deploy e gasta menos tokens; o xhigh fica para a F5, que anula, move e registra votos. Uma sessão só abre outra com esforço igual ou menor que o seu, então quem abre a F5 é a sessão principal.
+
 ## Ordem e paralelismo
 
 ```
@@ -49,7 +51,7 @@ F0 Fundação → F1 Banco e regras ─┬─→ F2 API do voto → F3 Telas pú
 
 ## F4 — Admin
 
-- **Agente:** admin.
+- **Agente:** admin, esforço high.
 - **Entrega:** `lib/auth.ts` (login, sessão iron-session, papéis), empreendimentos, importação com mapeamento de colunas e prévia (`lib/importacao.ts` com exceljs), eleições, candidatos com foto, troca de status, painel ao vivo com botão de desbloquear e relatório imprimível.
 - **Pronto quando:** dá para importar a planilha fictícia no layout real (4 abas de bloco), conduzir uma eleição do início ao fim pelo admin e salvar o relatório em PDF pelo navegador.
 - **Prompt:**
@@ -57,7 +59,7 @@ F0 Fundação → F1 Banco e regras ─┬─→ F2 API do voto → F3 Telas pú
 
 ## F5 — Godmode
 
-- **Agente:** god.
+- **Agente:** god, esforço xhigh.
 - **Entrega:** tela `admin/eleicoes/[id]/god` (voto pela mesa em lote, votos por documento, buscar voto, anular, mover, reabrir, zerar eleição de teste), auditoria e `admin/usuarios`, todos com motivo obrigatório e listados no relatório.
 - **Pronto quando:** operador recebe 403 nas rotas god, anular libera o apartamento para votar de novo, e mover para um apartamento que já tem voto válido falha.
 - **Prompt:**
@@ -65,7 +67,7 @@ F0 Fundação → F1 Banco e regras ─┬─→ F2 API do voto → F3 Telas pú
 
 ## F6 — QA e carga
 
-- **Agente:** QA.
+- **Agente:** QA, esforço high.
 - **Entrega:** testes Playwright dos fluxos (voto com CPF e com CNPJ; documento inválido; 3 erros, bloqueio e desbloqueio; documento de outro apartamento e sugestão; já votou; anular e votar de novo; voto pela mesa em lote no godmode) e script de carga em `tests/carga` com 300 votos em 60 s.
 - **Pronto quando:** tudo passa e esta consulta volta vazia depois da carga:
   ```sql
@@ -80,7 +82,7 @@ F0 Fundação → F1 Banco e regras ─┬─→ F2 API do voto → F3 Telas pú
 
 ## F7 — Deploy e dia do evento
 
-- **Agente:** deploy.
+- **Agente:** deploy, esforço high.
 - **Entrega:** app na Vercel com banco Neon, variáveis de ambiente, migração em produção, usuário god inicial, eleição de teste para ensaio e `docs/DIA-DO-EVENTO.md` com o checklist.
 - **Checklist do evento:** testar o sinal 4G no local; telão com QR funcionando; tablet da mesa logado; cédulas de papel numeradas por apartamento como plano B; responsável por publicar o resultado; exportar o relatório no fim.
 - **Pronto quando:** a equipe faz um ensaio geral numa eleição `teste`, que depois é zerada.
