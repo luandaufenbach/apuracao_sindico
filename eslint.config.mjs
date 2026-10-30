@@ -15,6 +15,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Relatórios e traces do Playwright (gerados).
+    "test-results/**",
+    "playwright-report/**",
+    "blob-report/**",
     // Skills do Claude Code (design system de referência, não é código do app).
     ".claude/**",
   ]),

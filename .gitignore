@@ -50,3 +50,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# playwright: relatórios e traces dos testes e2e
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
