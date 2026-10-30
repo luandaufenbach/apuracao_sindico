@@ -1,0 +1,413 @@
+/* Painel do admin: desktop primeiro, mas tudo funciona a partir de 375 px. */
+
+/* --- Casca: barra fixa no topo ---------------------------------------- */
+.barra {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav);
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  min-height: var(--nav-height-mobile);
+  padding: 0 clamp(16px, 3vw, 32px);
+  background: rgba(0, 0, 0, 0.78);
+  -webkit-backdrop-filter: var(--blur-nav);
+  backdrop-filter: var(--blur-nav);
+  box-shadow: 0 1px 0 var(--border-subtle);
+}
+.marca {
+  font-size: 18px;
+  letter-spacing: var(--tracking-title);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.marca:hover {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+.links {
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.link {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-control);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.link:hover {
+  color: var(--text-primary);
+  text-decoration: none;
+  background: var(--action-ghost-hover);
+}
+.linkAtivo {
+  color: var(--text-primary);
+  box-shadow: inset 0 -2px 0 var(--blue-500);
+}
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+  min-width: 0;
+}
+.nomeUsuario {
+  font-size: 14px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 767px) {
+  .barra {
+    flex-wrap: wrap;
+    gap: 0 var(--space-3);
+    padding-top: var(--space-2);
+  }
+  .links {
+    order: 3;
+    width: 100%;
+    margin: 0 calc(-1 * var(--space-3));
+    padding-bottom: var(--space-1);
+  }
+  .nomeUsuario {
+    display: none;
+  }
+}
+@media print {
+  .barra {
+    display: none;
+  }
+}
+
+/* --- Página ------------------------------------------------------------ */
+.pagina {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(20px, 3vw, 40px) clamp(16px, 3vw, 32px) var(--space-16);
+}
+.cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+.cabecaTexto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.olho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.olho a {
+  color: var(--text-tertiary);
+}
+.olho a:hover {
+  color: var(--text-primary);
+}
+.titulo {
+  font-size: var(--fs-h4);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-headline);
+  overflow-wrap: anywhere;
+}
+.sub {
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* --- Cartões e seções ------------------------------------------------- */
+.cartao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: clamp(16px, 2.5vw, 24px);
+  border-radius: var(--radius-card);
+  background: var(--surface-1);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+  min-width: 0;
+}
+.cartaoCabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.cartaoTitulo {
+  font-size: 18px;
+  letter-spacing: var(--tracking-title);
+}
+.pilha {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.duas {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+@media (max-width: 1023px) {
+  .duas {
+    grid-template-columns: 1fr;
+  }
+}
+.texto {
+  font-size: 14px;
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+.mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: var(--tracking-mono);
+}
+.vazio {
+  padding: var(--space-8) var(--space-4);
+  border-radius: var(--radius-card);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-tertiary);
+}
+
+/* --- Listas (linhas que viram cartões no celular) --------------------- */
+.lista {
+  display: flex;
+  flex-direction: column;
+}
+.linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  min-height: 56px;
+  padding: var(--space-3) 0;
+  box-shadow: inset 0 -1px 0 var(--border-subtle);
+}
+.linha:last-child {
+  box-shadow: none;
+}
+.linhaPrincipal {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 240px;
+  min-width: 0;
+}
+.linhaTitulo {
+  font-size: 15px;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+a.linhaTitulo:hover {
+  color: var(--text-link-hover);
+}
+.linhaMeta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: var(--tracking-mono);
+  color: var(--text-tertiary);
+}
+
+/* --- Formulários (Input do Lumen) ------------------------------------- */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.grade2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+.grade3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+@media (max-width: 639px) {
+  .grade2,
+  .grade3 {
+    grid-template-columns: 1fr;
+  }
+}
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.rotuloCampo {
+  font-size: 14px;
+  font-weight: var(--weight-medium);
+  letter-spacing: -0.01em;
+}
+.dica {
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--text-tertiary);
+}
+.controle {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border-default);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  transition: box-shadow var(--duration-fast) var(--ease-out);
+}
+.controle:hover {
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+.controle:focus,
+.controle:focus-visible {
+  outline: none;
+  box-shadow:
+    inset 0 0 0 1px var(--blue-500),
+    0 0 0 3px rgba(41, 141, 255, 0.28);
+}
+.controle::placeholder {
+  color: var(--text-tertiary);
+}
+.controle:disabled {
+  opacity: 0.45;
+}
+select.controle {
+  appearance: none;
+  padding-right: 32px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A1A9B6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+}
+select.controle option {
+  background: var(--surface-2);
+  color: var(--text-primary);
+}
+textarea.controle {
+  height: auto;
+  min-height: 96px;
+  padding: 12px 14px;
+  line-height: 1.45;
+  resize: vertical;
+}
+.pequeno {
+  height: 36px;
+  padding: 0 10px;
+  font-size: 14px;
+}
+.marcar {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding-top: var(--space-2);
+  font-size: 14px;
+  cursor: pointer;
+}
+.marcar input {
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0;
+  accent-color: var(--blue-600);
+  flex-shrink: 0;
+}
+
+/* --- Avisos ------------------------------------------------------------- */
+.alerta {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-card);
+  font-size: 14px;
+  line-height: var(--leading-normal);
+}
+.alerta svg {
+  margin-top: 2px;
+}
+.alertaErro {
+  background: var(--status-danger-bg);
+  color: var(--red-400);
+}
+.alertaAviso {
+  background: var(--status-warning-bg);
+  color: var(--amber-400);
+}
+.alertaInfo {
+  background: var(--status-info-bg);
+  color: var(--blue-200);
+}
+.alertaSucesso {
+  background: var(--status-success-bg);
+  color: var(--green-400);
+}
+
+/* --- Números em destaque (StatCard) ----------------------------------- */
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+@media (max-width: 1023px) {
+  .numeros {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.numero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--surface-1);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+.numeroValor {
+  font-size: clamp(32px, 4vw, 44px);
+  line-height: 1;
+  letter-spacing: var(--tracking-headline);
+  font-variant-numeric: tabular-nums;
+}
+.numeroDestaque {
+  background: var(--blue-600);
+  box-shadow: none;
+}
+.numeroDestaque .olho {
+  color: var(--blue-100);
+}

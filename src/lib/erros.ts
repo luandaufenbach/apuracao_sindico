@@ -3,6 +3,9 @@ import { z } from "zod";
 // Mensagens do Zod em português.
 z.config(z.locales.pt());
 
+/** Id de tabela: inteiro positivo que cabe no INT do PostgreSQL. */
+export const idBanco = z.int().positive().max(2_147_483_647);
+
 /** Entrada malformada ou que aponta para registro inexistente (HTTP 400/404). */
 export class EntradaInvalida extends Error {
   constructor(mensagem: string) {

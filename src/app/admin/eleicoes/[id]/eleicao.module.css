@@ -1,0 +1,174 @@
+/* --- Etapas do status ------------------------------------------------- */
+.etapas {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.etapas li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+  box-shadow: inset 0 2px 0 var(--border-default);
+  font-size: 13px;
+  color: var(--text-tertiary);
+  overflow-wrap: anywhere;
+}
+.marcaEtapa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-xs);
+  background: var(--surface-3);
+  color: var(--text-secondary);
+}
+.feita {
+  box-shadow: inset 0 2px 0 var(--blue-700) !important;
+  color: var(--text-secondary) !important;
+}
+.atual {
+  box-shadow: inset 0 2px 0 var(--blue-500) !important;
+  color: var(--text-primary) !important;
+}
+.atual .marcaEtapa {
+  background: var(--blue-600);
+  color: var(--white);
+  box-shadow: var(--glow-sm);
+}
+
+/* --- Dados da votação ------------------------------------------------- */
+.dados {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+.dados > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 44px;
+  box-shadow: inset 0 -1px 0 var(--border-subtle);
+}
+.dados dt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.dados dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: right;
+}
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.copiar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.copiar:hover {
+  background: var(--action-ghost-hover);
+  color: var(--text-primary);
+}
+
+/* --- Candidatos ------------------------------------------------------- */
+.candidato {
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+.foto,
+.iniciais {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: var(--radius-card);
+  object-fit: cover;
+}
+.iniciais {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blue-600);
+  font-family: var(--font-mono);
+  font-size: 16px;
+}
+.proposta {
+  margin-top: var(--space-1);
+  font-size: 14px;
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+.fotoCampo {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+.fotoGrande,
+.iniciaisGrande {
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+  border-radius: var(--radius-card);
+  object-fit: cover;
+}
+.iniciaisGrande {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blue-600);
+  font-family: var(--font-mono);
+  font-size: 24px;
+}
+.fotoCampo button {
+  align-self: flex-start;
+}
+.arquivoFoto {
+  max-width: 100%;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.arquivoFoto::file-selector-button {
+  margin-right: var(--space-3);
+  padding: 6px 10px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--surface-3);
+  color: var(--text-primary);
+  font: inherit;
+  cursor: pointer;
+}
+.rodapeDialogo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.espaco {
+  flex: 1;
+}
+@media (max-width: 639px) {
+  .rodapeDialogo > button {
+    flex: 1 1 auto;
+  }
+  .espaco {
+    display: none;
+  }
+}

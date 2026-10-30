@@ -1,0 +1,147 @@
+.de {
+  font-size: 0.45em;
+  letter-spacing: 0;
+  color: var(--blue-100);
+}
+.alarme {
+  color: var(--red-400);
+}
+.barra {
+  height: 8px;
+  border-radius: var(--radius-xs);
+  background: var(--surface-3);
+  overflow: hidden;
+}
+.barra span {
+  display: block;
+  height: 100%;
+  background: var(--blue-500);
+  box-shadow: var(--glow-sm);
+  transition: width var(--duration-slow) var(--ease-out);
+}
+
+/* --- Legenda e grade --------------------------------------------------- */
+.legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.legenda li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.amostra {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-xs);
+}
+.bloco {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.blocoTitulo {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.blocoTitulo span {
+  color: var(--text-tertiary);
+}
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 4px;
+}
+.apto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: var(--tracking-mono);
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow var(--duration-fast) var(--ease-out);
+}
+.apto:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-shadow);
+}
+.falta {
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border-default);
+  color: var(--text-secondary);
+}
+.votou {
+  background: var(--blue-600);
+  color: var(--white);
+}
+.bloqueado {
+  background: var(--status-danger-bg);
+  box-shadow: inset 0 0 0 1px var(--red-500);
+  color: var(--red-400);
+}
+.mesa {
+  background: var(--status-warning-bg);
+  box-shadow: inset 0 0 0 1px var(--amber-700);
+  color: var(--amber-400);
+}
+@media (hover: hover) {
+  .apto:hover {
+    box-shadow: inset 0 0 0 1px var(--border-strong);
+  }
+}
+
+.listaCurta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+.desbloquear {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.erroCurto {
+  font-size: 12px;
+  color: var(--red-400);
+}
+.detalhes {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+.detalhes > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 40px;
+  align-items: center;
+  box-shadow: inset 0 -1px 0 var(--border-subtle);
+  font-size: 14px;
+}
+.detalhes dt {
+  color: var(--text-tertiary);
+}
+.detalhes dd {
+  margin: 0;
+  text-align: right;
+}

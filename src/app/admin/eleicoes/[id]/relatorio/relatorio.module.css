@@ -1,0 +1,184 @@
+/* Relatório: uma folha clara (tema light do Lumen) sobre o fundo do painel,
+   pronta para imprimir em A4 ou salvar em PDF pelo navegador. */
+.fundo {
+  min-height: 100dvh;
+  padding: var(--space-6) var(--space-4) var(--space-16);
+  background: var(--gray-100);
+  color: var(--text-primary);
+}
+.ferramentas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  max-width: 210mm;
+  margin: 0 auto var(--space-4);
+  font-size: 14px;
+}
+.folha {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  max-width: 210mm;
+  margin: 0 auto;
+  padding: clamp(20px, 5vw, 18mm);
+  border-radius: var(--radius-card);
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+  font-size: 14px;
+}
+.topo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-bottom: var(--space-4);
+  box-shadow: inset 0 -2px 0 var(--black);
+}
+.olho {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.titulo {
+  font-size: 32px;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-headline);
+}
+.sub {
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+.aviso {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--status-warning-bg);
+  color: var(--amber-700);
+}
+.dados {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+}
+.dados dt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.dados dd {
+  margin: var(--space-1) 0 0;
+  font-size: 16px;
+}
+.secao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.secaoTitulo {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.texto {
+  color: var(--text-secondary);
+}
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tabela th,
+.tabela td {
+  padding: 6px 8px 6px 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--gray-200);
+}
+.tabela th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border-bottom-color: var(--black);
+}
+.tabela tr {
+  break-inside: avoid;
+}
+.num {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+.mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.alvo {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.vencedor {
+  font-size: 18px;
+  letter-spacing: var(--tracking-title);
+}
+.colunas {
+  font-size: 13px;
+}
+.assinaturas {
+  break-inside: avoid;
+}
+.linhasAssinatura {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-12) var(--space-8);
+  margin-top: var(--space-10);
+}
+.assinatura {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.assinatura span {
+  height: 1px;
+  background: var(--black);
+}
+.rodape {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+@media (max-width: 639px) {
+  .linhasAssinatura {
+    grid-template-columns: 1fr;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 14mm;
+}
+@media print {
+  .fundo {
+    min-height: 0;
+    padding: 0;
+    background: var(--white);
+  }
+  .ferramentas {
+    display: none;
+  }
+  .folha {
+    max-width: none;
+    padding: 0;
+    box-shadow: none;
+  }
+}

@@ -152,6 +152,7 @@ export async function criarCenario(
   );
 
   return {
+    empreendimentoId: emp.id,
     eleicaoId: el.id,
     apto: { a101, a102, a201, a202, a301, a401 },
     comprador: {
@@ -168,6 +169,11 @@ export async function criarCenario(
     godId: usuarioDe("god"),
     godInativoId: usuarioDe("exgod"),
   };
+}
+
+/** Empreendimento criado fora do cenário, para apagar junto no fim. */
+export function registrarEmpreendimento(id: number): void {
+  criados.empreendimentos.push(id);
 }
 
 /** Apaga tudo que os cenários criaram e fecha o pool. */

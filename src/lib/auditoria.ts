@@ -3,7 +3,7 @@ import { z } from "zod";
 import { db, type Executor } from "@/db";
 import { logAuditoria } from "@/db/schema";
 
-import { validar } from "./erros";
+import { idBanco, validar } from "./erros";
 
 /**
  * Ações de godmode: exigem usuário e motivo (R8) e aparecem no relatório final.
@@ -23,7 +23,7 @@ export function acaoGod(acao: string): boolean {
   return (ACOES_GOD as readonly string[]).includes(acao);
 }
 
-const id = z.int().positive();
+const id = idBanco;
 
 const entradaAuditoria = z
   .object({

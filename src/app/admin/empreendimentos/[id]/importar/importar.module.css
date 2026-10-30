@@ -1,0 +1,111 @@
+.arquivo {
+  padding-top: 10px;
+  font-size: 14px;
+}
+.arquivo::file-selector-button {
+  margin-right: var(--space-3);
+  padding: 4px 10px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--surface-3);
+  color: var(--text-primary);
+  font: inherit;
+  cursor: pointer;
+}
+.link {
+  font-size: 15px;
+}
+.abas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-6);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.abas legend {
+  width: 100%;
+  margin-bottom: var(--space-1);
+}
+.amostraCaixa {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.rolagem {
+  overflow-x: auto;
+  border-radius: var(--radius-card);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+.amostra {
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.amostra th,
+.amostra td {
+  max-width: 220px;
+  padding: 6px 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  box-shadow: inset 0 -1px 0 var(--border-subtle);
+}
+.amostra th {
+  font-weight: var(--weight-regular);
+  color: var(--text-tertiary);
+}
+.amostra td {
+  color: var(--text-secondary);
+}
+.linhaCabecalho td {
+  background: var(--status-info-bg);
+  color: var(--blue-200);
+}
+.grupo,
+.todos {
+  border-radius: var(--radius-card);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+.grupo summary,
+.todos summary {
+  min-height: 44px;
+  padding: 12px var(--space-4);
+  font-size: 14px;
+  cursor: pointer;
+}
+.grupo > div,
+.todos > div {
+  padding: 0 var(--space-4);
+}
+.texto_neutro {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.texto_info {
+  font-size: 14px;
+  color: var(--blue-200);
+}
+.texto_aviso {
+  font-size: 14px;
+  color: var(--amber-400);
+}
+.texto_perigo {
+  font-size: 14px;
+  color: var(--red-400);
+}
+.rotuloPrevia {
+  flex: 0 0 180px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.compradorPrevia {
+  font-size: 14px;
+}
+@media (max-width: 639px) {
+  .rotuloPrevia {
+    flex-basis: 100%;
+  }
+}

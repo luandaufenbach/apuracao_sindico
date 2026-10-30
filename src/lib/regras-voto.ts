@@ -20,12 +20,19 @@ import {
 
 import { registrarAuditoria } from "./auditoria";
 import { validarDocumento } from "./documento";
-import { AcessoNegado, EntradaInvalida, validar, violacaoUnica } from "./erros";
+import { ordemApartamento } from "./ordem-apartamento";
+import {
+  AcessoNegado,
+  EntradaInvalida,
+  idBanco,
+  validar,
+  violacaoUnica,
+} from "./erros";
 
 /** Documentos válidos que não conferem até bloquear o apartamento (R5). */
 export const LIMITE_TENTATIVAS = 3;
 
-const id = z.int().positive();
+const id = idBanco;
 const motivo = z.string().trim().min(1, "Informe o motivo.").max(500);
 // O documento como a pessoa digitou; a normalização e o dígito verificador
 // ficam com validarDocumento, porque documento inválido é resposta, não erro.
@@ -136,11 +143,7 @@ async function apartamentosDoDocumento(
         eq(apartamento.empreendimentoId, el.empreendimentoId),
       ),
     )
-    .orderBy(
-      apartamento.bloco,
-      sql`length(${apartamento.numero})`,
-      apartamento.numero,
-    );
+    .orderBy(...ordemApartamento);
   // Um apartamento aparece uma vez, mesmo com dois compradores do mesmo documento.
   const vistos = new Set<number>();
   return linhas.filter(

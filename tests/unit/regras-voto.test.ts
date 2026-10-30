@@ -616,3 +616,34 @@ describe("R12: voto pela mesa", () => {
     );
   });
 });
+
+describe("ids fora do INT do PostgreSQL", () => {
+  it("id maior que 2147483647 é entrada inválida, não erro do banco", async () => {
+    const c = await criarCenario();
+    const gigante = 2_147_483_648;
+    await expect(
+      desbloquearApartamento({
+        eleicaoId: c.eleicaoId,
+        apartamentoId: gigante,
+        usuarioId: c.operadorId,
+      }),
+    ).rejects.toBeInstanceOf(EntradaInvalida);
+    await expect(
+      anularVoto({ votoId: gigante, usuarioId: c.godId, motivo: "Teste" }),
+    ).rejects.toBeInstanceOf(EntradaInvalida);
+    await expect(
+      registrarAuditoria({ eleicaoId: gigante, acao: "apto.desbloquear" }),
+    ).rejects.toBeInstanceOf(EntradaInvalida);
+  });
+
+  it("2147483647 ainda é um id aceito", async () => {
+    const c = await criarCenario();
+    await expect(
+      desbloquearApartamento({
+        eleicaoId: c.eleicaoId,
+        apartamentoId: 2_147_483_647,
+        usuarioId: c.operadorId,
+      }),
+    ).rejects.toThrow("Apartamento não encontrado neste empreendimento.");
+  });
+});
