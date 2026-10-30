@@ -6,21 +6,17 @@ import { exigirUsuarioPagina } from "@/lib/auth";
 import { idBanco } from "@/lib/erros";
 import { dadosRelatorio } from "@/lib/painel";
 
-import { contar, dataHora, NOME_ORIGEM, NOME_STATUS } from "../../../formato";
+import {
+  contar,
+  dataHora,
+  NOME_ACAO,
+  NOME_ORIGEM,
+  NOME_STATUS,
+} from "../../../formato";
 import { Imprimir } from "./imprimir";
 import estilos from "./relatorio.module.css";
 
 export const metadata: Metadata = { title: "Relatório" };
-
-const NOME_ACAO: Record<string, string> = {
-  "voto.mesa": "Voto pela mesa",
-  "voto.anular": "Voto anulado",
-  "voto.mover": "Voto movido",
-  "eleicao.reabrir": "Votação reaberta",
-  "eleicao.zerar": "Eleição zerada",
-  "usuario.criar": "Usuário criado",
-  "usuario.desativar": "Usuário desativado",
-};
 
 export default async function Relatorio({
   params,
@@ -143,8 +139,10 @@ export default async function Relatorio({
                     <td className={estilos.mono}>{dataHora(a.criadoEm)}</td>
                     <td>
                       {NOME_ACAO[a.acao] ?? a.acao}
-                      {a.alvo && (
-                        <span className={estilos.alvo}> ({a.alvo})</span>
+                      {(a.detalhe ?? a.alvo) && (
+                        <span className={estilos.alvo}>
+                          {a.detalhe ?? a.alvo}
+                        </span>
                       )}
                     </td>
                     <td>{a.usuario ?? "—"}</td>

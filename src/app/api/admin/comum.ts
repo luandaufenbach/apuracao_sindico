@@ -64,6 +64,14 @@ export function rotaAdmin(
   });
 }
 
+/** Rota do godmode: só o papel god, conferido no servidor a cada requisição. */
+export function rotaGod(
+  req: Request,
+  rota: (usuario: Usuario) => Promise<unknown>,
+) {
+  return rotaAdmin(req, rota, ["god"]);
+}
+
 /** Id da URL (`id` ou outro segmento); fora do formato vira 404. */
 export async function idDaRota<P extends Record<string, string>>(
   params: Promise<P>,

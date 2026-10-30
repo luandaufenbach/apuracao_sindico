@@ -58,3 +58,48 @@ export const contar = (n: number, um: string, varios: string) =>
   `${n} ${n === 1 ? um : varios}`;
 
 export const NOME_ORIGEM = { documento: "Documento", mesa: "Mesa" } as const;
+
+/** `Ap 502 PCD` vira `502 PCD`, para caber na grade de apartamentos. */
+export const rotuloCurto = (rotulo: string) => rotulo.replace(/^ap\.?\s*/i, "");
+
+/** Datas viram texto no JSON. */
+export type Json<T> = T extends Date
+  ? string
+  : T extends (infer U)[]
+    ? Json<U>[]
+    : T extends object
+      ? { [K in keyof T]: Json<T[K]> }
+      : T;
+
+/** Dados do servidor no formato das respostas da API: datas como texto. */
+export const paraJson = <T>(valor: T): Json<T> =>
+  JSON.parse(JSON.stringify(valor));
+
+/** Nome de cada ação do log de auditoria. */
+export const NOME_ACAO: Record<string, string> = {
+  "voto.mesa": "Voto pela mesa",
+  "voto.anular": "Voto anulado",
+  "voto.mover": "Voto movido",
+  "eleicao.reabrir": "Votação reaberta",
+  "eleicao.zerar": "Eleição zerada",
+  "usuario.criar": "Usuário criado",
+  "usuario.desativar": "Usuário desativado",
+  "eleicao.criar": "Eleição criada",
+  "eleicao.editar": "Eleição editada",
+  "eleicao.abrir": "Votação aberta",
+  "eleicao.encerrar": "Votação encerrada",
+  "eleicao.publicar": "Resultado publicado",
+  "candidato.criar": "Candidato criado",
+  "candidato.editar": "Candidato editado",
+  "candidato.remover": "Candidato removido",
+  "apto.criar": "Apartamento criado",
+  "apto.editar": "Apartamento editado",
+  "apto.remover": "Apartamento removido",
+  "apto.desbloquear": "Apartamento desbloqueado",
+  "documento.falha": "Documento não conferiu",
+  "empreendimento.criar": "Empreendimento criado",
+  "empreendimento.editar": "Empreendimento editado",
+  "importacao.confirmar": "Importação confirmada",
+  "sessao.entrar": "Entrou no painel",
+  "sessao.sair": "Saiu do painel",
+};

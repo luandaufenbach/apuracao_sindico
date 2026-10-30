@@ -14,6 +14,8 @@ import { chamarApi } from "./cliente";
 const LINKS = [
   { href: "/admin/eleicoes", rotulo: "Eleições" },
   { href: "/admin/empreendimentos", rotulo: "Empreendimentos" },
+  // Só o god vê; a página confere o papel no servidor.
+  { href: "/admin/usuarios", rotulo: "Usuários", soGod: true },
 ];
 
 export function Barra({ nome, papel }: { nome: string; papel: Papel }) {
@@ -38,7 +40,7 @@ export function Barra({ nome, papel }: { nome: string; papel: Papel }) {
         Apuração
       </Link>
       <nav className={estilos.links} aria-label="Painel">
-        {LINKS.map((l) => {
+        {LINKS.filter((l) => !l.soGod || papel === "god").map((l) => {
           const ativo = caminho.startsWith(l.href);
           return (
             <Link

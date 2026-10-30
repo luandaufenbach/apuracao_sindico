@@ -243,7 +243,7 @@ Login e logout, empreendimentos, importação (prévia e confirmação), apartam
 
 ### God (papel `god`)
 
-`eleicoes/[id]/voto-mesa` (`{ apartamentoIds, candidatoId, nome, documento, motivo }`), `eleicoes/[id]/votos-por-documento`, `votos/[id]/anular`, `votos/[id]/mover`, `eleicoes/[id]/reabrir`, `eleicoes/[id]/zerar` (só eleição de teste), `auditoria`, `usuarios`.
+`eleicoes/[id]/voto-mesa` (`{ apartamentoIds, candidatoId, nome, documento, motivo }`), `eleicoes/[id]/votos-por-documento`, `eleicoes/[id]/votos` (buscar voto: `?apartamentoId=` ou `?comprovante=`), `votos/[id]/anular`, `votos/[id]/mover`, `eleicoes/[id]/reabrir`, `eleicoes/[id]/zerar` (só eleição de teste), `auditoria`, `usuarios` e `usuarios/[id]/desativar`. Toda ação recebe `{ motivo }` e devolve 403 para quem não é god.
 
 ## Segurança
 

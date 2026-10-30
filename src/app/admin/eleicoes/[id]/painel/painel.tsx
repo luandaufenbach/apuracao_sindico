@@ -13,18 +13,16 @@ import { useConsultaPeriodica } from "@/ui/use-consulta-periodica";
 
 import estilos from "../../../admin.module.css";
 import { chamarApi, mensagemDe } from "../../../cliente";
-import { hora, NOME_ORIGEM } from "../../../formato";
+import {
+  hora,
+  type Json,
+  NOME_ORIGEM,
+  rotuloCurto as curto,
+} from "../../../formato";
 import { Alerta, Cabecalho, LinkBotao, SeloStatus } from "../../../pecas";
 import proprio from "./painel.module.css";
 
-/** Datas viram texto no JSON. */
-export type Json<T> = T extends Date
-  ? string
-  : T extends (infer U)[]
-    ? Json<U>[]
-    : T extends object
-      ? { [K in keyof T]: Json<T[K]> }
-      : T;
+export type { Json };
 
 type Dados = Json<DadosPainel>;
 type Apto = Dados["apartamentos"][number];
@@ -40,8 +38,6 @@ const NOME_SITUACAO: Record<Situacao, string> = {
   mesa: "Só pela mesa",
   falta: "Falta votar",
 };
-
-const curto = (rotulo: string) => rotulo.replace(/^ap\.?\s*/i, "");
 
 export function Painel({ inicial }: { inicial: Dados }) {
   const [dados, setDados] = useState(inicial);

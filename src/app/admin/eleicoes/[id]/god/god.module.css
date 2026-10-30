@@ -1,0 +1,564 @@
+/* Godmode: as mesmas peças do painel (admin.module.css), mais a cabine do
+   voto pela mesa, a busca de voto, os votos por documento e a auditoria. */
+
+/* --- Seleção de apartamentos ------------------------------------------- */
+/* Tabs do Lumen, variante segmented. */
+.segmentado {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-control);
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+.segmentado button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.segmentado button span {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+.segmentado button:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-shadow);
+}
+.segmentado button[aria-pressed="true"] {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+}
+.segmentado button[aria-pressed="true"] span {
+  color: inherit;
+  opacity: 0.6;
+}
+@media (pointer: coarse) {
+  .segmentado button {
+    min-height: 40px;
+  }
+}
+.acoesSelecao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.bloco {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.blocoTitulo {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 4px;
+}
+.apto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 44px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border-default);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: var(--tracking-mono);
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+@media (hover: hover) {
+  .apto:hover {
+    box-shadow: inset 0 0 0 1px var(--border-strong);
+  }
+}
+.apto:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-shadow);
+}
+.apto[aria-pressed="true"] {
+  background: var(--blue-600);
+  box-shadow: none;
+  color: var(--white);
+}
+.resumo {
+  margin-top: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+/* --- Cabine: a tela que a pessoa vê no tablet --------------------------- */
+.cabine {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  overflow-y: auto;
+}
+.cabine[open] {
+  animation: surgir var(--duration-base) var(--ease-out);
+}
+.cabine::backdrop {
+  background: #000;
+}
+@keyframes surgir {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cabine[open] {
+    animation: none;
+  }
+}
+.cabineConteudo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: clamp(24px, 6vw, 64px) 16px var(--space-12);
+}
+.cabineTitulo {
+  font-size: var(--fs-h4);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-headline);
+}
+.seloOk {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-control);
+  background: var(--status-success-bg);
+  color: var(--green-400);
+}
+.candidatos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.candidato {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: var(--space-2) var(--space-4);
+  align-items: center;
+  width: 100%;
+  padding: var(--space-4);
+  border: 0;
+  border-radius: var(--radius-card);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-hairline);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: box-shadow var(--duration-base) var(--ease-out);
+}
+.candidato:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-shadow);
+}
+@media (hover: hover) {
+  .candidato:hover:not(:disabled) {
+    box-shadow: inset 0 0 0 1px var(--border-strong);
+  }
+}
+.candidato:active:not(:disabled) {
+  background: var(--surface-2);
+}
+.candidato:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.foto,
+.iniciais {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-card);
+}
+.foto {
+  object-fit: cover;
+  background: var(--surface-3);
+}
+.iniciais {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blue-600);
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 22px;
+  letter-spacing: var(--tracking-mono);
+}
+.candidatoNome {
+  display: block;
+  font-size: var(--fs-h6);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-title);
+}
+.candidatoApto {
+  display: block;
+  margin-top: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.proposta {
+  grid-column: 1 / -1;
+  font-size: var(--fs-body-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--text-secondary);
+}
+.comprovantes {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.comprovantes li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  min-height: 56px;
+  padding: var(--space-3) 0;
+  box-shadow: inset 0 -1px 0 var(--border-subtle);
+}
+.codigo {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  letter-spacing: 0.12em;
+}
+
+/* --- Buscar voto ------------------------------------------------------- */
+.busca {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+.busca > :first-child {
+  flex: 1;
+}
+.campoCodigo {
+  font-family: var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+/* O candidato: só esta aba mostra, então ele ganha destaque. */
+.escolha {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+  box-shadow: inset 2px 0 0 var(--blue-500);
+}
+.escolhaNome {
+  font-size: var(--fs-h6);
+  letter-spacing: var(--tracking-title);
+}
+.dados {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-3) var(--space-4);
+  margin: 0;
+}
+.dados dt {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.dados dd {
+  margin: var(--space-1) 0 0;
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+.historico {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+.historico li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.motivo {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-xs);
+  background: var(--status-warning-bg);
+  color: var(--amber-400);
+  font-size: 14px;
+  line-height: var(--leading-normal);
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+@media (max-width: 639px) {
+  .busca {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* --- Votos por documento ------------------------------------------------ */
+.docs {
+  display: flex;
+  flex-direction: column;
+}
+.docsCabeca,
+.docLinha {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr) 80px 120px 16px;
+  align-items: center;
+  gap: var(--space-4);
+}
+.docsCabeca {
+  padding: 0 0 var(--space-2);
+  box-shadow: inset 0 -1px 0 var(--border-default);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.docsCabeca span:nth-child(3),
+.docsCabeca span:nth-child(4) {
+  text-align: right;
+}
+.doc {
+  box-shadow: inset 0 -1px 0 var(--border-subtle);
+}
+.docLinha {
+  width: 100%;
+  min-height: 52px;
+  padding: var(--space-2) 0;
+  border: 0;
+  background: none;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .docLinha:hover {
+    background: var(--action-ghost-hover);
+  }
+}
+.docLinha:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-shadow);
+}
+.docNome {
+  overflow-wrap: anywhere;
+}
+.docNumero {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.completo {
+  color: var(--green-400);
+}
+.fora {
+  font-size: 11px;
+  color: var(--amber-400);
+}
+.soCelular {
+  display: none;
+}
+.girado {
+  transform: rotate(180deg);
+}
+.docAptos {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+  list-style: none;
+  font-size: 14px;
+}
+.docAptos[hidden] {
+  display: none;
+}
+.docAptos li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
+  padding: var(--space-2) 0;
+  box-shadow: inset 0 -1px 0 var(--border-subtle);
+}
+.docAptos li:last-child {
+  box-shadow: none;
+}
+.seloFora {
+  margin-left: var(--space-2);
+}
+.naoVotou {
+  color: var(--text-tertiary);
+}
+@media (max-width: 767px) {
+  .docsCabeca {
+    display: none;
+  }
+  .docLinha {
+    grid-template-columns: minmax(0, 1fr) auto auto 16px;
+    grid-template-areas:
+      "doc doc doc seta"
+      "nome cad vot seta";
+    gap: var(--space-1) var(--space-3);
+    padding: var(--space-3) 0;
+  }
+  .docLinha > :nth-child(1) {
+    grid-area: doc;
+  }
+  .docLinha > :nth-child(2) {
+    grid-area: nome;
+  }
+  .docLinha > :nth-child(3) {
+    grid-area: cad;
+  }
+  .docLinha > :nth-child(4) {
+    grid-area: vot;
+  }
+  .docLinha > :nth-child(5) {
+    grid-area: seta;
+  }
+  .docNumero {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .soCelular {
+    display: inline;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-caps);
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+}
+
+/* --- Reabrir e zerar ------------------------------------------------------ */
+.condicao {
+  font-size: 14px;
+  color: var(--text-tertiary);
+}
+
+/* --- Auditoria ------------------------------------------------------------- */
+.filtros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  align-items: end;
+  gap: var(--space-3);
+}
+@media (max-width: 767px) {
+  .filtros {
+    grid-template-columns: 1fr;
+  }
+}
+.log {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.logItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-1) var(--space-4);
+  padding: var(--space-3) 0;
+  box-shadow: inset 0 -1px 0 var(--border-subtle);
+  font-size: 14px;
+}
+.logItem > :first-child {
+  grid-column: 1 / -1;
+}
+.logAcao {
+  overflow-wrap: anywhere;
+}
+.logQuem {
+  color: var(--text-secondary);
+  text-align: right;
+}
+.logItem .motivo,
+.logDados {
+  grid-column: 1 / -1;
+}
+.logDados summary {
+  width: fit-content;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: var(--tracking-mono);
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+.logDados pre {
+  margin: var(--space-2) 0 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-xs);
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--text-secondary);
+}

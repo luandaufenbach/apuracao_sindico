@@ -74,3 +74,18 @@ export function validarDocumento(entrada: string): DocumentoValido | null {
 export function prefixoDocumento(documento: string): string {
   return normalizarDocumento(documento).slice(0, 3);
 }
+
+// Documento mascarado para o godmode: só os 3 primeiros caracteres aparecem,
+// `126.***.***-**` ou `12.3**.***/****-**`.
+export function mascararDocumento(documento: string): string {
+  const doc = normalizarDocumento(documento);
+  const molde =
+    doc.length === 14
+      ? "__.___.___/____-__"
+      : doc.length === 11
+        ? "___.___.___-__"
+        : null;
+  if (!molde) return `${doc.slice(0, 3)}***`;
+  let i = 0;
+  return molde.replace(/_/g, () => (i < 3 ? doc[i++] : "*"));
+}

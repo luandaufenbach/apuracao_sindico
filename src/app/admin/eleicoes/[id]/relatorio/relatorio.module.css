@@ -121,6 +121,8 @@
   white-space: nowrap;
 }
 .alvo {
+  display: block;
+  margin-top: 2px;
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--text-secondary);

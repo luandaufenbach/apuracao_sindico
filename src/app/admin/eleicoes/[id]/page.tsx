@@ -19,7 +19,7 @@ export const metadata: Metadata = { title: "Eleição" };
 export default async function Eleicao({
   params,
 }: PageProps<"/admin/eleicoes/[id]">) {
-  await exigirUsuarioPagina();
+  const usuario = await exigirUsuarioPagina();
   const id = idBanco.safeParse(Number((await params).id));
   const el = id.success ? await buscarEleicao(id.data) : null;
   if (!el) notFound();
@@ -72,6 +72,14 @@ export default async function Eleicao({
             >
               Relatório
             </LinkBotao>
+            {usuario.papel === "god" && (
+              <LinkBotao
+                href={`/admin/eleicoes/${el.id}/god`}
+                icone="shield-check"
+              >
+                Godmode
+              </LinkBotao>
+            )}
           </>
         }
       />

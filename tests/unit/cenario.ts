@@ -176,6 +176,11 @@ export function registrarEmpreendimento(id: number): void {
   criados.empreendimentos.push(id);
 }
 
+/** Usuário criado fora do cenário (pela API), para apagar junto no fim. */
+export function registrarUsuario(id: number): void {
+  criados.usuarios.push(id);
+}
+
 /** Apaga tudo que os cenários criaram e fecha o pool. */
 export async function limparCenarios(): Promise<void> {
   await apagarEmpreendimentos(db, criados.empreendimentos);

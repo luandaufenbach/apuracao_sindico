@@ -33,7 +33,8 @@ import {
 export const LIMITE_TENTATIVAS = 3;
 
 const id = idBanco;
-const motivo = z.string().trim().min(1, "Informe o motivo.").max(500);
+/** Motivo das ações de godmode (R8): obrigatório e gravado no log. */
+export const motivo = z.string().trim().min(1, "Informe o motivo.").max(500);
 // O documento como a pessoa digitou; a normalização e o dígito verificador
 // ficam com validarDocumento, porque documento inválido é resposta, não erro.
 const documentoDigitado = z.string().max(32);
@@ -58,7 +59,8 @@ async function buscarEleicao(
   return el;
 }
 
-async function exigirPapel(
+/** Relê o usuário no banco: precisa estar ativo e ter um dos papéis. */
+export async function exigirPapel(
   ex: Executor,
   usuarioId: number,
   papeis: ("operador" | "god")[],
@@ -594,15 +596,26 @@ const entradaAnular = z.object({ votoId: id, usuarioId: id, motivo });
 
 /**
  * Anula um voto válido (god, motivo obrigatório). O voto nunca é apagado
- * (R7): vira `anulado` e o apartamento fica livre para votar de novo.
+ * (R7): vira `anulado` e o apartamento fica livre para votar de novo. Com o
+ * resultado publicado, não anula: o total que o telão mostra é o final.
  */
 export async function anularVoto(
   entrada: z.input<typeof entradaAnular>,
-): Promise<{ ok: true } | { ok: false; erro: "ja_anulado" }> {
+): Promise<
+  { ok: true } | { ok: false; erro: "ja_anulado" | "resultado_publicado" }
+> {
   const e = validar(entradaAnular, entrada);
   await exigirPapel(db, e.usuarioId, ["god"]);
 
   return db.transaction(async (tx) => {
+    const [ref] = await tx
+      .select({ eleicaoId: voto.eleicaoId })
+      .from(voto)
+      .where(eq(voto.id, e.votoId));
+    if (!ref) throw new EntradaInvalida("Voto não encontrado.");
+    // A eleição trava antes do voto, na ordem de quem publica e de quem zera:
+    // sem impasse, e ninguém publica no meio da anulação.
+    const el = await buscarEleicao(tx, ref.eleicaoId, true);
     const [v] = await tx
       .select({
         eleicaoId: voto.eleicaoId,
@@ -615,6 +628,9 @@ export async function anularVoto(
     if (!v) throw new EntradaInvalida("Voto não encontrado.");
     if (v.status !== "valido")
       return { ok: false, erro: "ja_anulado" } as const;
+    if (el.status === "publicada") {
+      return { ok: false, erro: "resultado_publicado" } as const;
+    }
 
     await tx
       .update(voto)

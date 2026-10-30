@@ -2,7 +2,20 @@
 // "Quem vê o quê"). O operador vê quem votou, quando e por onde, mas nunca em
 // quem cada apartamento votou: nenhuma consulta daqui liga voto a candidato,
 // só o total por candidato no relatório, depois do encerramento.
-import { and, count, desc, eq, inArray, isNotNull, sql } from "drizzle-orm";
+import {
+  and,
+  count,
+  desc,
+  eq,
+  gte,
+  inArray,
+  isNotNull,
+  isNull,
+  like,
+  lte,
+  or,
+  sql,
+} from "drizzle-orm";
 
 import { db } from "@/db";
 import {
@@ -18,6 +31,7 @@ import {
 } from "@/db/schema";
 
 import { ACOES_GOD } from "./auditoria";
+import { descreverAcoes } from "./godmode";
 import { ordemApartamento } from "./ordem-apartamento";
 import { LIMITE_TENTATIVAS } from "./regras-voto";
 
@@ -176,12 +190,23 @@ export async function dadosRelatorio(eleicaoId: number) {
   const vencedores =
     resultado && maximo > 0 ? resultado.filter((c) => c.votos === maximo) : [];
 
-  const acoesGod = await db
+  // Usuários criados ou desativados com a votação aberta também entram: o log
+  // deles não tem eleição.
+  const usuariosNaVotacao = el.abertaEm
+    ? and(
+        isNull(logAuditoria.eleicaoId),
+        like(logAuditoria.acao, "usuario.%"),
+        gte(logAuditoria.criadoEm, el.abertaEm),
+        el.encerradaEm ? lte(logAuditoria.criadoEm, el.encerradaEm) : undefined,
+      )
+    : undefined;
+  const logsGod = await db
     .select({
       id: logAuditoria.id,
       acao: logAuditoria.acao,
       alvo: logAuditoria.alvo,
       motivo: logAuditoria.motivo,
+      dados: logAuditoria.dados,
       criadoEm: logAuditoria.criadoEm,
       usuario: usuarioAdmin.nome,
     })
@@ -189,11 +214,21 @@ export async function dadosRelatorio(eleicaoId: number) {
     .leftJoin(usuarioAdmin, eq(usuarioAdmin.id, logAuditoria.usuarioId))
     .where(
       and(
-        eq(logAuditoria.eleicaoId, el.id),
         inArray(logAuditoria.acao, [...ACOES_GOD]),
+        or(eq(logAuditoria.eleicaoId, el.id), usuariosNaVotacao),
       ),
     )
     .orderBy(logAuditoria.criadoEm, logAuditoria.id);
+  const detalhes = await descreverAcoes(logsGod);
+  const acoesGod = logsGod.map((a) => ({
+    id: a.id,
+    acao: a.acao,
+    alvo: a.alvo,
+    motivo: a.motivo,
+    criadoEm: a.criadoEm,
+    usuario: a.usuario,
+    detalhe: detalhes.get(a.id) ?? null,
+  }));
 
   return {
     eleicao: el,
