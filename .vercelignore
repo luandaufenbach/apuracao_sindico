@@ -1,0 +1,18 @@
+# O `vercel deploy` sobe esta pasta sem olhar o .gitignore. Segredos, planilhas
+# e o que não entra no build ficam de fora.
+.env*
+!.env.example
+*.xlsx
+*.xls
+*.csv
+
+.git
+.claude
+.next
+.vercel
+node_modules
+tests
+test-results
+playwright-report
+blob-report
+*.tsbuildinfo

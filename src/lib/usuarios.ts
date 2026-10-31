@@ -31,23 +31,28 @@ export function listarUsuarios() {
     .orderBy(desc(usuarioAdmin.ativo), asc(usuarioAdmin.nome), usuarioAdmin.id);
 }
 
+// Também usados pelo script do god inicial (src/db/criar-god.ts).
+export const nomeUsuario = z.string().trim().min(1, "Informe o nome.").max(120);
+export const emailUsuario = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .pipe(z.email("Informe um e-mail válido.").max(200));
+// O bcrypt só usa os primeiros 72 bytes da senha: acima disso, o resto seria
+// ignorado sem aviso. Letra acentuada ocupa 2 bytes.
+export const senhaNova = z
+  .string()
+  .min(8, "A senha precisa de pelo menos 8 caracteres.")
+  .max(72, "A senha tem no máximo 72 caracteres.")
+  .refine(
+    (s) => new TextEncoder().encode(s).length <= 72,
+    "A senha é longa demais: use até 72 caracteres sem acento.",
+  );
+
 const entradaNovoUsuario = z.object({
-  nome: z.string().trim().min(1, "Informe o nome.").max(120),
-  email: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .pipe(z.email("Informe um e-mail válido.").max(200)),
-  // O bcrypt só usa os primeiros 72 bytes da senha: acima disso, o resto seria
-  // ignorado sem aviso. Letra acentuada ocupa 2 bytes.
-  senha: z
-    .string()
-    .min(8, "A senha precisa de pelo menos 8 caracteres.")
-    .max(72, "A senha tem no máximo 72 caracteres.")
-    .refine(
-      (s) => new TextEncoder().encode(s).length <= 72,
-      "A senha é longa demais: use até 72 caracteres sem acento.",
-    ),
+  nome: nomeUsuario,
+  email: emailUsuario,
+  senha: senhaNova,
   papel: z.enum(["operador", "god"]),
   motivo,
   usuarioId: idBanco,

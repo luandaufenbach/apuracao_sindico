@@ -15,6 +15,11 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx src/db/seed.ts",
+    "db:criar-god": "tsx src/db/criar-god.ts",
+    "db:ensaio": "tsx src/db/ensaio.ts",
+    "prod:migrate": "node --env-file=.env.producao node_modules/drizzle-kit/bin.cjs migrate",
+    "prod:criar-god": "tsx --env-file=.env.producao src/db/criar-god.ts",
+    "prod:ensaio": "tsx --env-file=.env.producao src/db/ensaio.ts",
     "test:carga": "tsx tests/carga/carga.ts"
   },
   "dependencies": {
