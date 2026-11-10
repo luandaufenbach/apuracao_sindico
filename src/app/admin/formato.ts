@@ -39,6 +39,16 @@ export const dataHora = (d: Date | string) =>
 /** `19:42:05`, no horário de Brasília. */
 export const hora = (d: Date | string) => formatoHora.format(new Date(d));
 
+const formatoHoraMinuto = new Intl.DateTimeFormat("pt-BR", {
+  hour: "2-digit",
+  minute: "2-digit",
+  timeZone: FUSO,
+});
+
+/** `19:42`, no horário de Brasília. */
+export const horaMinuto = (d: Date | string) =>
+  formatoHoraMinuto.format(new Date(d));
+
 export const NOME_STATUS: Record<StatusEleicao, string> = {
   rascunho: "Rascunho",
   aberta: "Aberta",

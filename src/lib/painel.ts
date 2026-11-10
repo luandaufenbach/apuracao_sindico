@@ -150,10 +150,14 @@ export async function dadosRelatorio(eleicaoId: number) {
   const el = await cabecalho(eleicaoId);
   if (!el) return null;
 
-  const [{ total }] = await db
-    .select({ total: count() })
+  // Total por bloco, para a lista de quem votou dizer "36 de 44" em cada um.
+  const blocos = await db
+    .select({ bloco: apartamento.bloco, total: count() })
     .from(apartamento)
-    .where(eq(apartamento.empreendimentoId, el.empreendimentoId));
+    .where(eq(apartamento.empreendimentoId, el.empreendimentoId))
+    .groupBy(apartamento.bloco)
+    .orderBy(apartamento.bloco);
+  const total = blocos.reduce((n, b) => n + b.total, 0);
 
   const votaram = await db
     .select({
@@ -232,6 +236,7 @@ export async function dadosRelatorio(eleicaoId: number) {
   return {
     eleicao: el,
     totalApartamentos: total,
+    blocos,
     votaram,
     resultado,
     vencedores,
