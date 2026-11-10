@@ -38,11 +38,10 @@ yarn-error.log*
 *.xlsx
 *.xls
 
-# claude code: permissões locais de cada máquina
-.claude/settings.local.json
-
-# lumen: imagens de referência de outra marca, fora do repositório
-.claude/skills/lumen-design/uploads/
+# configuração local do editor e das ferramentas
+.claude/
+CLAUDE.md
+AGENTS.md
 
 # vercel
 .vercel
