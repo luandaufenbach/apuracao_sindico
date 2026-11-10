@@ -135,7 +135,6 @@ describe("Origin", () => {
     const corpo = {
       empreendimentoId: c.empreendimentoId,
       titulo: "Não pode",
-      teste: true,
     };
     const semOrigem = await ler(
       postEleicao(post(`${BASE}/eleicoes`, corpo, { host: "localhost:3000" })),
@@ -173,7 +172,6 @@ describe("eleição do início ao fim pelo painel", () => {
         post(`${BASE}/eleicoes`, {
           empreendimentoId: c.empreendimentoId,
           titulo: "Síndico 2027",
-          teste: true,
         }),
       ),
     );

@@ -29,7 +29,6 @@ export function NovaEleicao({
         corpo: {
           empreendimentoId: Number(dados.get("empreendimentoId")),
           titulo: dados.get("titulo"),
-          teste: dados.get("teste") === "on",
         },
       });
       router.push(`/admin/eleicoes/${id}`);
@@ -74,16 +73,6 @@ export function NovaEleicao({
             defaultValue="Eleição de síndico"
           />
         </Campo>
-        <label className={estilos.marcar}>
-          <input type="checkbox" name="teste" />
-          <span>
-            Eleição de teste
-            <span className={estilos.dica}>
-              {" "}
-              — para ensaio. Só eleição de teste pode ser zerada depois.
-            </span>
-          </span>
-        </label>
         {erro && <Alerta>{erro}</Alerta>}
         <Botao type="submit" iconeEsquerda="plus" carregando={enviando}>
           Criar eleição

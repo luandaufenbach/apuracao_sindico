@@ -28,6 +28,6 @@ App web para eleger o síndico na entrega de um empreendimento: um voto válido 
 - `npm run db:generate`: gera migração a partir de `src/db/schema.ts`.
 - `npm run db:migrate`: aplica as migrações de `src/db/migrations` no `DATABASE_URL`.
 - `npm run db:seed`: popula o banco com dados fictícios. Nunca em produção.
-- `npm run prod:migrate`, `prod:criar-god`, `prod:ensaio`: migração, god inicial e eleição de ensaio no banco de produção, lido de `.env.producao`. Guia em `docs/DIA-DO-EVENTO.md`.
+- `npm run prod:migrate`, `prod:criar-god`: migração e god inicial no banco de produção, lido de `.env.producao`. Guia em `docs/DIA-DO-EVENTO.md`.
 
 @AGENTS.md

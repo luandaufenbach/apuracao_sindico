@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { Abas, idAba, idPainel } from "@/ui/abas";
-import { Selo } from "@/ui/selo";
 
 import estilos from "../../../admin.module.css";
 import { Cabecalho, LinkBotao, SeloStatus } from "../../../pecas";
@@ -26,7 +25,7 @@ const ABAS = [
   { valor: "mesa", rotulo: "Voto pela mesa" },
   { valor: "buscar", rotulo: "Buscar voto" },
   { valor: "documentos", rotulo: "Votos por documento" },
-  { valor: "votacao", rotulo: "Reabrir e zerar" },
+  { valor: "votacao", rotulo: "Reabrir votação" },
   { valor: "auditoria", rotulo: "Auditoria" },
 ] as const;
 type Aba = (typeof ABAS)[number]["valor"];
@@ -78,7 +77,6 @@ export function Godmode({
             <Link href={`/admin/eleicoes/${eleicao.id}`}>{eleicao.titulo}</Link>
             <span>/</span>
             <SeloStatus status={eleicao.status} />
-            {eleicao.teste && <Selo>Teste</Selo>}
           </>
         }
         titulo="Godmode"

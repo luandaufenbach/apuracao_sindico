@@ -12,13 +12,9 @@ import { Alerta, Campo } from "../../pecas";
 export function DadosEleicao({
   eleicaoId,
   titulo,
-  teste,
-  rascunho,
 }: {
   eleicaoId: number;
   titulo: string;
-  teste: boolean;
-  rascunho: boolean;
 }) {
   const router = useRouter();
   const [erro, setErro] = useState<string | null>(null);
@@ -31,11 +27,7 @@ export function DadosEleicao({
     setErro(null);
     try {
       await chamarApi(`/api/admin/eleicoes/${eleicaoId}`, {
-        corpo: {
-          titulo: dados.get("titulo"),
-          // Fora do rascunho o campo fica desabilitado e não vai no form.
-          teste: rascunho ? dados.get("teste") === "on" : teste,
-        },
+        corpo: { titulo: dados.get("titulo") },
       });
       router.refresh();
     } catch (falha) {
@@ -58,23 +50,6 @@ export function DadosEleicao({
             maxLength={200}
           />
         </Campo>
-        <label className={estilos.marcar}>
-          <input
-            type="checkbox"
-            name="teste"
-            defaultChecked={teste}
-            disabled={!rascunho}
-          />
-          <span>
-            Eleição de teste
-            <span className={estilos.dica}>
-              {" "}
-              {rascunho
-                ? "— só eleição de teste pode ser zerada."
-                : "— só muda enquanto é rascunho."}
-            </span>
-          </span>
-        </label>
         {erro && <Alerta>{erro}</Alerta>}
         <Botao type="submit" variante="contorno" carregando={enviando}>
           Salvar dados

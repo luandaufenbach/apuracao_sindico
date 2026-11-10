@@ -68,7 +68,9 @@ export function Grade({
               className={`${e.apto} ${novoAndar ? e.novoAndar : ""}`}
               disabled={a.jaVotou}
               onClick={() => aoEscolher(a)}
-              aria-label={situacao ? `${a.rotulo}: ${situacao.texto}` : a.rotulo}
+              aria-label={
+                situacao ? `${a.rotulo}: ${situacao.texto}` : a.rotulo
+              }
             >
               <span>{a.rotulo}</span>
               {situacao && (

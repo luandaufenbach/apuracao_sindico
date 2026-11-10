@@ -1,6 +1,6 @@
 // Godmode (docs/ESPECIFICACAO.md, "Godmode" e "Quem vê o quê"): só o papel
 // god. Aqui ficam as consultas que ligam voto a quem votou e a candidato, a
-// auditoria e as ações sobre a eleição inteira (reabrir e zerar). Anular,
+// auditoria e a ação sobre a eleição inteira (reabrir). Anular,
 // mover e voto pela mesa ficam em regras-voto.ts.
 import {
   and,
@@ -22,7 +22,6 @@ import {
   comprador,
   eleicao,
   logAuditoria,
-  situacaoApartamento,
   usuarioAdmin,
   voto,
 } from "@/db/schema";
@@ -380,7 +379,7 @@ export async function buscarVotos(
   }));
 }
 
-// --- Reabrir e zerar ---------------------------------------------------------
+// --- Reabrir -----------------------------------------------------------------
 
 const entradaAcaoEleicao = z.object({
   eleicaoId: idBanco,
@@ -427,56 +426,6 @@ export async function reabrirEleicao(
       },
       tx,
     );
-  });
-}
-
-/**
- * Apaga os votos (válidos e anulados) e as tentativas de uma eleição de
- * teste e a volta para rascunho. Única exceção à R7. O log de auditoria fica.
- * Trava a eleição para escrita: votos em andamento terminam antes.
- */
-export async function zerarEleicao(
-  entrada: z.input<typeof entradaAcaoEleicao>,
-): Promise<{ votosApagados: number }> {
-  const e = validar(entradaAcaoEleicao, entrada);
-  return db.transaction(async (tx) => {
-    await exigirPapel(tx, e.usuarioId, ["god"]);
-    const [el] = await tx
-      .select({ status: eleicao.status, teste: eleicao.teste })
-      .from(eleicao)
-      .where(eq(eleicao.id, e.eleicaoId))
-      .for("update");
-    if (!el) throw new EntradaInvalida("Eleição não encontrada.");
-    if (!el.teste) {
-      throw new EntradaInvalida("Só eleição de teste pode ser zerada.");
-    }
-    const apagados = await tx
-      .delete(voto)
-      .where(eq(voto.eleicaoId, e.eleicaoId))
-      .returning({ status: voto.status });
-    await tx
-      .delete(situacaoApartamento)
-      .where(eq(situacaoApartamento.eleicaoId, e.eleicaoId));
-    await tx
-      .update(eleicao)
-      .set({ status: "rascunho", abertaEm: null, encerradaEm: null })
-      .where(eq(eleicao.id, e.eleicaoId));
-    await registrarAuditoria(
-      {
-        eleicaoId: e.eleicaoId,
-        usuarioId: e.usuarioId,
-        acao: "eleicao.zerar",
-        alvo: `eleicao:${e.eleicaoId}`,
-        motivo: e.motivo,
-        dados: {
-          de: el.status,
-          votos: apagados.length,
-          anulados: apagados.filter((v) => v.status === "anulado").length,
-        },
-      },
-      tx,
-    );
-    return { votosApagados: apagados.length };
   });
 }
 

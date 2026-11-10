@@ -37,7 +37,6 @@ export default async function PaginaGodmode({
         id: el.id,
         titulo: el.titulo,
         status: el.status,
-        teste: el.teste,
         empreendimento: el.empreendimento,
       }}
       candidatos={el.candidatos.map((c) => ({

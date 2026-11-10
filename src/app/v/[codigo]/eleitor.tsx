@@ -274,7 +274,11 @@ export function Eleitor({ codigo }: { codigo: string }) {
     return (
       <main className={e.tela}>
         <Topo />
-        <Aviso icone="triangle-alert" tom="aviso" titulo="Votação não encontrada">
+        <Aviso
+          icone="triangle-alert"
+          tom="aviso"
+          titulo="Votação não encontrada"
+        >
           Confira o link ou aponte a câmera de novo para o QR code do telão.
         </Aviso>
       </main>
@@ -455,7 +459,11 @@ export function Eleitor({ codigo }: { codigo: string }) {
         aoVoltar={() =>
           voltar(
             naCandidatura
-              ? { tela: "apartamento", apartamentoId: apartamento.id, candidato: false }
+              ? {
+                  tela: "apartamento",
+                  apartamentoId: apartamento.id,
+                  candidato: false,
+                }
               : grade,
           )
         }

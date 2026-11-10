@@ -16,7 +16,7 @@ export async function GET(
   });
 }
 
-const corpoEditar = z.object({ titulo: z.string(), teste: z.boolean() });
+const corpoEditar = z.object({ titulo: z.string() });
 
 export async function POST(
   req: Request,

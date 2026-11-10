@@ -42,9 +42,7 @@ export default async function Relatorio({
       </div>
       <article className={estilos.folha}>
         <header className={estilos.topo}>
-          <p className={estilos.olho}>
-            Relatório da apuração{el.teste && " · Eleição de teste"}
-          </p>
+          <p className={estilos.olho}>Relatório da apuração</p>
           <h1 className={estilos.titulo}>{el.titulo}</h1>
           <p className={estilos.sub}>{el.empreendimento}</p>
         </header>

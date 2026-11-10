@@ -14,9 +14,11 @@ export const ACOES_GOD = [
   "voto.anular",
   "voto.mover",
   "eleicao.reabrir",
+  // O zerar saiu do app; a ação fica para os logs antigos.
   "eleicao.zerar",
   "usuario.criar",
   "usuario.desativar",
+  "empreendimento.excluir",
 ] as const;
 
 export function acaoGod(acao: string): boolean {

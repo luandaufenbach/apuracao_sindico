@@ -10,7 +10,13 @@ const MARGEM = 4;
  * QR code em SVG, desenhado a partir da matriz da lib `qrcode`: um caminho só,
  * nítido em qualquer tamanho de tela.
  */
-export function Qr({ texto, className }: { texto: string; className?: string }) {
+export function Qr({
+  texto,
+  className,
+}: {
+  texto: string;
+  className?: string;
+}) {
   const { tamanho, caminho } = useMemo(() => {
     const { modules } = create(texto, { errorCorrectionLevel: "M" });
     let d = "";

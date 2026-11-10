@@ -6,7 +6,6 @@ import { exigirUsuarioPagina } from "@/lib/auth";
 import { listarApartamentos } from "@/lib/cadastro";
 import { buscarEleicao } from "@/lib/eleicoes";
 import { idBanco } from "@/lib/erros";
-import { Selo } from "@/ui/selo";
 
 import estilos from "../../admin.module.css";
 import { Cabecalho, LinkBotao, SeloStatus } from "../../pecas";
@@ -38,7 +37,6 @@ export default async function Eleicao({
             <Link href="/admin/eleicoes">Eleições</Link>
             <span>/</span>
             <SeloStatus status={el.status} />
-            {el.teste && <Selo>Teste</Selo>}
           </>
         }
         titulo={el.titulo}
@@ -100,12 +98,7 @@ export default async function Eleicao({
             candidatos={el.candidatos.length}
             apartamentos={el.apartamentos}
           />
-          <DadosEleicao
-            eleicaoId={el.id}
-            titulo={el.titulo}
-            teste={el.teste}
-            rascunho={el.status === "rascunho"}
-          />
+          <DadosEleicao eleicaoId={el.id} titulo={el.titulo} />
         </div>
       </div>
     </main>

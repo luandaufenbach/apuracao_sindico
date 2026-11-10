@@ -9,7 +9,11 @@ import { formatarHora, nomeApartamento } from "./formato";
 
 const ESTADO = {
   rascunho: {
-    selo: <Selo tom="aviso" vivo>Aguardando abertura</Selo>,
+    selo: (
+      <Selo tom="aviso" vivo>
+        Aguardando abertura
+      </Selo>
+    ),
     titulo: "A votação ainda não começou",
     texto: "Esta tela se atualiza sozinha quando a votação abrir.",
   },

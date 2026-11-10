@@ -1,8 +1,8 @@
 # Dia do evento
 
-Guia da equipe para a eleição de síndico na entrega do empreendimento: produção, ensaio geral, checklist do dia e plano B em papel.
+Guia da equipe para a eleição de síndico na entrega do empreendimento: produção, preparação, checklist do dia e plano B em papel.
 
-- **URL de produção:** `https://______________.vercel.app`
+- **URL de produção:** `https://sindico-sao-lucas.vercel.app`
 - **Admin:** `<URL>/admin` (login com e-mail e senha)
 - **Responsável técnico (deploy, banco, god):** ______________
 - **Responsável por publicar o resultado:** ______________
@@ -44,7 +44,6 @@ DATABASE_URL_UNPOOLED=...
 |---|---|
 | `npm run prod:migrate` | Aplica as migrações de `src/db/migrations` no banco de produção. |
 | `npm run prod:criar-god` | Cria o primeiro god. Pede nome, e-mail e senha no terminal, e a senha não aparece. Para se já houver god ativo. |
-| `npm run prod:ensaio` | Cria o empreendimento fictício "Ensaio geral (fictício)" e a eleição de teste. Rodar de novo só mostra o código e a tabela de documentos. |
 
 - Nunca rode `npm run db:seed` em produção. O seed apaga e recria dados fictícios.
 - Depois de usar o `.env.producao`, apague o arquivo. Ele tem a senha do banco.
@@ -58,44 +57,24 @@ vercel deploy --prod
 
 O `.vercelignore` impede que `.env*`, planilhas (`*.xlsx`, `*.xls`, `*.csv`), `tests/` e `.claude/` subam para a Vercel. Não faça deploy no dia do evento, a não ser para corrigir um erro que impeça a votação.
 
-## 2. Ensaio geral
-
-Faça o ensaio no local do evento, com os aparelhos do dia: telão, tablet da mesa e celulares de 4G de operadoras diferentes.
-
-1. Rode `npm run prod:ensaio` para obter o código da eleição de teste e a tabela de documentos fictícios. Imprima a tabela para a equipe.
-2. No admin, entre com o god e abra a eleição "Ensaio geral (teste)". Clique em **Abrir votação**.
-3. Abra o telão em `/telao/<código>` e confira se o QR code fica legível do fundo da sala.
-4. Cada pessoa da equipe escaneia o QR com o próprio celular, no 4G, e vota com um documento da tabela.
-5. Teste os casos que vão acontecer no dia:
-   - CPF de outro apartamento: aparece a sugestão do apartamento certo.
-   - Três CPFs válidos que não conferem: o apartamento fica bloqueado. Desbloqueie pelo **Painel**.
-   - O dono de dois apartamentos (Ap 301 dos dois blocos) vota em um e recebe o convite para votar no outro.
-   - O CNPJ do Bloco 02 Ap 202.
-   - Voto pela mesa no godmode para o Bloco 02 Ap 302, que não tem documento. A escolha é feita no tablet.
-   - Anular um voto no godmode e votar de novo no mesmo apartamento.
-6. Clique em **Encerrar** e depois em **Publicar resultado**. Confira o resultado no telão.
-7. Abra o **Relatório** e salve em PDF pelo navegador (Imprimir → Salvar como PDF).
-8. No godmode, clique em **Zerar eleição**, com motivo. Os votos são apagados e a eleição volta para rascunho. O ensaio pode ser repetido quantas vezes for preciso.
-
-Depois do ensaio, a eleição de teste fica zerada. O empreendimento fictício pode continuar no banco: ele não aparece na eleição real.
-
-## 3. Preparar a eleição real (antes do dia)
+## 2. Preparar a eleição (antes do dia)
 
 1. No admin de produção, crie o empreendimento e importe a planilha "Controle de Vendas" (`.xlsx` ou `.csv`). A planilha real nunca entra no repositório nem em nenhuma pasta do projeto.
 2. Revise a prévia: apartamentos sem documento válido entram como "só pela mesa". Corrija os documentos que puder no cadastro do empreendimento.
-3. Crie a eleição real **sem** marcar "teste". Uma eleição sem teste não pode ser zerada, só anulada voto a voto.
+3. Crie a eleição em **Eleições**, escolhendo o empreendimento. Voto nunca é apagado: um voto errado é anulado no godmode, com motivo.
 4. Cadastre os candidatos: nome, apartamento, foto e proposta.
 5. Crie os usuários da equipe em `/admin/usuarios`: operador para quem acompanha o painel, god só para quem faz voto pela mesa e correções.
-6. Se quiser treinar com a lista real, crie uma segunda eleição **com** "teste" no mesmo empreendimento, use só voto pela mesa e zere depois. Não use documentos de moradores reais para testar.
-7. Imprima as cédulas e a lista do plano B (seção 5).
+6. Imprima as cédulas e a lista do plano B (seção 4).
 
-## 4. Checklist do dia
+Um empreendimento importado errado pode ser excluído pelo god, na página do empreendimento, com motivo e digitando o nome para confirmar. A exclusão leva junto apartamentos, compradores e eleições, e é recusada se alguma eleição já tiver voto.
+
+## 3. Checklist do dia
 
 ### Antes de abrir
 
 - [ ] **Sinal 4G no local:** teste com chips de pelo menos três operadoras, no ponto onde os moradores vão ficar. Se o sinal for fraco, tenha uma rede Wi-Fi para os eleitores.
-- [ ] **Telão com QR funcionando:** abra `/telao/<código da eleição real>` 30 min antes. Escaneie o QR do fundo da sala e confira se ele abre a tela de votação.
-- [ ] **Tablet da mesa logado:** faça login no admin com um usuário god e deixe aberto o godmode da eleição real. Deixe o carregador na tomada.
+- [ ] **Telão com QR funcionando:** abra `/telao/<código da eleição>` 30 min antes. Escaneie o QR do fundo da sala e confira se ele abre a tela de votação.
+- [ ] **Tablet da mesa logado:** faça login no admin com um usuário god e deixe aberto o godmode da eleição. Deixe o carregador na tomada.
 - [ ] **Cédulas de papel numeradas por apartamento (plano B):** uma por apartamento, impressas, contadas e guardadas com a urna lacrada.
 - [ ] **Lista de compradores impressa** para conferir documentos no plano B, guardada com a mesa.
 - [ ] **Responsável por publicar o resultado** definido e logado no admin.
@@ -117,7 +96,7 @@ Depois do ensaio, a eleição de teste fica zerada. O empreendimento fictício p
 - [ ] **Exportar o relatório:** abra **Relatório** e salve em PDF (Imprimir → Salvar como PDF). Guarde o PDF em dois lugares e imprima uma via para as assinaturas.
 - [ ] Recolha as cédulas de papel não usadas e as listas impressas. Destrua as listas com dados pessoais depois da ata.
 
-## 5. Plano B em papel
+## 4. Plano B em papel
 
 O plano B mantém a votação andando se o app ficar inacessível no local. Os votos já gravados no sistema continuam valendo: o banco fica na nuvem e não depende da internet do salão.
 

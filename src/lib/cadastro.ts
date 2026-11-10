@@ -10,6 +10,7 @@ import {
   comprador,
   eleicao,
   empreendimento,
+  logAuditoria,
   situacaoApartamento,
   voto,
 } from "@/db/schema";
@@ -20,6 +21,7 @@ import { validarDocumento } from "./documento";
 import { EntradaInvalida, idBanco, validar, violacaoUnica } from "./erros";
 import { removerCompradores } from "./importacao";
 import { ordemApartamento } from "./ordem-apartamento";
+import { exigirPapel, motivo } from "./regras-voto";
 
 // --- Empreendimentos ---------------------------------------------------------
 
@@ -94,6 +96,112 @@ export async function renomearEmpreendimento(
         acao: "empreendimento.editar",
         alvo: `empreendimento:${id}`,
         dados: { nome },
+      },
+      tx,
+    );
+  });
+}
+
+const entradaExcluirEmpreendimento = z.object({
+  empreendimentoId: idBanco,
+  usuarioId: idBanco,
+  motivo,
+  // O nome digitado de novo confirma a exclusão.
+  confirmacao: z.string().trim().max(200),
+});
+
+/**
+ * Exclui um empreendimento com apartamentos, compradores e eleições (god,
+ * motivo obrigatório). Recusa se alguma eleição tem voto, válido ou anulado:
+ * voto nunca é apagado (R7). O log de auditoria das eleições fica, desligado
+ * delas.
+ */
+export async function excluirEmpreendimento(
+  entrada: z.input<typeof entradaExcluirEmpreendimento>,
+): Promise<void> {
+  const e = validar(entradaExcluirEmpreendimento, entrada);
+  await db.transaction(async (tx) => {
+    await exigirPapel(tx, e.usuarioId, ["god"]);
+    // Trava o empreendimento (ninguém cria eleição nem apartamento nele) e as
+    // eleições (voto em andamento termina antes, e nenhum novo começa).
+    const [emp] = await tx
+      .select({ nome: empreendimento.nome })
+      .from(empreendimento)
+      .where(eq(empreendimento.id, e.empreendimentoId))
+      .for("update");
+    if (!emp) throw new EntradaInvalida("Empreendimento não encontrado.");
+    if (e.confirmacao !== emp.nome.trim()) {
+      throw new EntradaInvalida(
+        "Digite o nome do empreendimento exatamente como aparece para confirmar.",
+      );
+    }
+    const eleIds = (
+      await tx
+        .select({ id: eleicao.id })
+        .from(eleicao)
+        .where(eq(eleicao.empreendimentoId, e.empreendimentoId))
+        .for("update")
+    ).map((el) => el.id);
+    if (eleIds.length > 0) {
+      const [votos] = await tx
+        .select({ n: count() })
+        .from(voto)
+        .where(inArray(voto.eleicaoId, eleIds));
+      if (votos.n > 0) {
+        throw new EntradaInvalida(
+          "O empreendimento tem eleição com votos e não pode ser excluído.",
+        );
+      }
+      await tx
+        .update(logAuditoria)
+        .set({ eleicaoId: null })
+        .where(inArray(logAuditoria.eleicaoId, eleIds));
+      await tx
+        .delete(situacaoApartamento)
+        .where(inArray(situacaoApartamento.eleicaoId, eleIds));
+      await tx.delete(candidato).where(inArray(candidato.eleicaoId, eleIds));
+      await tx.delete(eleicao).where(inArray(eleicao.id, eleIds));
+    }
+
+    const aptIds = (
+      await tx
+        .select({ id: apartamento.id })
+        .from(apartamento)
+        .where(eq(apartamento.empreendimentoId, e.empreendimentoId))
+    ).map((a) => a.id);
+    let compradores = 0;
+    if (aptIds.length > 0) {
+      // Candidato de eleição de outro empreendimento perde só o apartamento.
+      await tx
+        .update(candidato)
+        .set({ apartamentoId: null })
+        .where(inArray(candidato.apartamentoId, aptIds));
+      compradores = (
+        await tx
+          .delete(comprador)
+          .where(inArray(comprador.apartamentoId, aptIds))
+          .returning({ id: comprador.id })
+      ).length;
+      await tx
+        .delete(apartamento)
+        .where(eq(apartamento.empreendimentoId, e.empreendimentoId));
+    }
+    await tx
+      .delete(empreendimento)
+      .where(eq(empreendimento.id, e.empreendimentoId));
+
+    await registrarAuditoria(
+      {
+        usuarioId: e.usuarioId,
+        acao: "empreendimento.excluir",
+        alvo: `empreendimento:${e.empreendimentoId}`,
+        motivo: e.motivo,
+        dados: {
+          nome: emp.nome,
+          apartamentos: aptIds.length,
+          compradores,
+          eleicoes: eleIds.length,
+        },
       },
       tx,
     );

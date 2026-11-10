@@ -15,7 +15,6 @@ export type EleicaoGod = {
   id: number;
   titulo: string;
   status: StatusEleicao;
-  teste: boolean;
   empreendimento: string;
 };
 

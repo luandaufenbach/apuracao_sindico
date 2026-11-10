@@ -11,7 +11,6 @@ export async function GET(req: Request) {
 const corpoEleicao = z.object({
   empreendimentoId: z.number(),
   titulo: z.string(),
-  teste: z.boolean(),
 });
 
 export async function POST(req: Request) {

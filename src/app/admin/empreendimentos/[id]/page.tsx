@@ -9,6 +9,7 @@ import { idBanco } from "@/lib/erros";
 import estilos from "../../admin.module.css";
 import { Cabecalho, LinkBotao, SeloStatus } from "../../pecas";
 import { Apartamentos } from "./apartamentos";
+import { Excluir } from "./excluir";
 import { Renomear } from "./renomear";
 
 export const metadata: Metadata = { title: "Empreendimento" };
@@ -16,7 +17,7 @@ export const metadata: Metadata = { title: "Empreendimento" };
 export default async function Empreendimento({
   params,
 }: PageProps<"/admin/empreendimentos/[id]">) {
-  await exigirUsuarioPagina();
+  const usuario = await exigirUsuarioPagina();
   const id = idBanco.safeParse(Number((await params).id));
   const emp = id.success ? await buscarEmpreendimento(id.data) : null;
   if (!emp) notFound();
@@ -75,6 +76,10 @@ export default async function Empreendimento({
               </div>
             )}
           </section>
+          {/* Só o god vê; a rota confere o papel no servidor. */}
+          {usuario.papel === "god" && (
+            <Excluir empreendimentoId={emp.id} nome={emp.nome} />
+          )}
         </div>
       </div>
     </main>

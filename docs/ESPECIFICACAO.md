@@ -20,7 +20,7 @@ Nomes de domínio em português sem acento (`apartamento`, `eleicao`, `voto`).
 |---|---|---|
 | Eleitor | Público, sem login, pelo link/QR da eleição | Escolhe bloco e apartamento, completa o CPF ou CNPJ, vota e recebe comprovante |
 | Operador (admin) | Login, papel `operador` | Cadastros, importação da planilha, candidatos, abrir/encerrar votação, painel ao vivo, desbloquear apartamento, telão, relatório |
-| God (godmode) | Login, papel `god` | Tudo do operador, mais: voto pela mesa, votos por documento, anular voto, mover voto, reabrir votação, zerar eleição de teste, auditoria, usuários |
+| God (godmode) | Login, papel `god` | Tudo do operador, mais: voto pela mesa, votos por documento, anular voto, mover voto, reabrir votação, excluir empreendimento, auditoria, usuários |
 
 Toda ação de operador ou god grava em `log_auditoria`. Ação de godmode exige motivo e aparece no relatório final.
 
@@ -63,7 +63,7 @@ Página pública, só com dados agregados. Mostra o QR code do link de voto, o t
   2. Escolher o modelo de colunas. O modelo padrão é o da planilha "Controle de Vendas" (seção abaixo). Para outra planilha, mapear as colunas à mão.
   3. Prévia com problemas. Apartamento sem nenhum documento válido (vazio, dígitos a mais ou a menos, dígito verificador errado) entra como "só pela mesa", com aviso. CPF e CNPJ valem como documento. Documento repetido em apartamentos diferentes é normal: uma pessoa ou empresa pode ter vários.
   4. Confirmar.
-- **Eleições**: criar (título, empreendimento, flag `teste`). Candidatos com nome, apartamento (opcional), foto redimensionada para 400 px, proposta de até 300 caracteres e ordem de exibição.
+- **Eleições**: criar (título, empreendimento). Candidatos com nome, apartamento (opcional), foto redimensionada para 400 px, proposta de até 300 caracteres e ordem de exibição.
 - **Status**: `rascunho` → `aberta` → `encerrada` → `publicada`, com os botões Abrir votação, Encerrar e Publicar resultado.
 - **Painel ao vivo** (`painel`): contadores (votaram, faltam, bloqueados), grade de apartamentos colorida por situação, lista dos apartamentos que só votam pela mesa e últimos votos (apartamento, nome de quem votou, horário, origem). O candidato escolhido não aparece aqui. Apartamento bloqueado tem o botão Desbloquear, que zera as tentativas.
 - **Relatório** (`relatorio`): página para imprimir ou salvar em PDF com empreendimento, eleição, horários de abertura e encerramento, total de apartamentos, apartamentos que votaram, votos por candidato, vencedor, lista de apartamentos que votaram, ações de godmode com motivo e espaço para assinaturas.
@@ -99,7 +99,7 @@ Layout da planilha real do Res. São Lucas:
 - Anular voto (motivo obrigatório): o status vira `anulado` e o apartamento fica livre para votar de novo.
 - Mover voto para outro apartamento (motivo obrigatório). Falha se o destino já tem voto válido.
 - Reabrir votação encerrada (motivo obrigatório).
-- Zerar eleição, apenas quando `teste = true`.
+- Excluir empreendimento (motivo obrigatório e o nome digitado de novo para confirmar). Apaga junto, numa transação, apartamentos, compradores e eleições com candidatos e situações. Recusa se alguma eleição do empreendimento tem voto, válido ou anulado. O log de auditoria das eleições fica, desligado delas.
 - Auditoria: lista do `log_auditoria` com filtros.
 - Usuários: criar e desativar operadores e gods.
 
@@ -111,7 +111,7 @@ Layout da planilha real do Res. São Lucas:
 - **R4** — Documento com dígito verificador inválido não conta tentativa.
 - **R5** — Três documentos válidos que não conferem bloqueiam o apartamento até o operador desbloquear. O contador sobe com incremento atômico no banco.
 - **R6** — Documento de outro apartamento do empreendimento gera sugestão dos apartamentos certos e não conta tentativa. Um documento pode ter vários apartamentos.
-- **R7** — Voto anulado nunca é apagado. A única exceção é zerar uma eleição de teste.
+- **R7** — Voto, válido ou anulado, nunca é apagado pelo app.
 - **R8** — Toda ação de operador ou god grava log. Ação de godmode exige motivo.
 - **R9** — Não limitar por IP: o Wi-Fi do evento e o 4G das operadoras compartilham IP entre muitas pessoas.
 - **R10** — A API pública nunca devolve nome nem documento, apenas os 3 primeiros caracteres do documento na dica.
@@ -156,7 +156,7 @@ CREATE TABLE eleicao (
   codigo            TEXT NOT NULL UNIQUE,   -- aleatório, usado no link público
   titulo            TEXT NOT NULL,
   status            status_eleicao NOT NULL DEFAULT 'rascunho',
-  teste             BOOLEAN NOT NULL DEFAULT false,
+  teste             BOOLEAN NOT NULL DEFAULT false,  -- sem uso no app; só o seed de dev marca
   aberta_em         TIMESTAMPTZ,
   encerrada_em      TIMESTAMPTZ
 );
@@ -243,7 +243,7 @@ Login e logout, empreendimentos, importação (prévia e confirmação), apartam
 
 ### God (papel `god`)
 
-`eleicoes/[id]/voto-mesa` (`{ apartamentoIds, candidatoId, nome, documento, motivo }`), `eleicoes/[id]/votos-por-documento`, `eleicoes/[id]/votos` (buscar voto: `?apartamentoId=` ou `?comprovante=`), `votos/[id]/anular`, `votos/[id]/mover`, `eleicoes/[id]/reabrir`, `eleicoes/[id]/zerar` (só eleição de teste), `auditoria`, `usuarios` e `usuarios/[id]/desativar`. Toda ação recebe `{ motivo }` e devolve 403 para quem não é god.
+`eleicoes/[id]/voto-mesa` (`{ apartamentoIds, candidatoId, nome, documento, motivo }`), `eleicoes/[id]/votos-por-documento`, `eleicoes/[id]/votos` (buscar voto: `?apartamentoId=` ou `?comprovante=`), `votos/[id]/anular`, `votos/[id]/mover`, `eleicoes/[id]/reabrir`, `empreendimentos/[id]/excluir` (`{ motivo, confirmacao }`, só sem voto), `auditoria`, `usuarios` e `usuarios/[id]/desativar`. Toda ação recebe `{ motivo }` e devolve 403 para quem não é god.
 
 ## Segurança
 

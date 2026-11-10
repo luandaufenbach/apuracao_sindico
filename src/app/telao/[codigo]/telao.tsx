@@ -146,7 +146,9 @@ export function Telao({ codigo }: { codigo: string }) {
           <span>{eleicao.empreendimento}</span>
           <span className={t.selos}>
             {semConexao && (
-              <span className={t.semConexao}>Sem conexão · tentando de novo</span>
+              <span className={t.semConexao}>
+                Sem conexão · tentando de novo
+              </span>
             )}
             <span className={`${t.status} ${STATUS[status].classe}`}>
               {STATUS[status].rotulo}
@@ -248,12 +250,15 @@ function Resultado({
   // Do mais votado para o menos votado; no empate, a ordem da cédula.
   const linhas = [...resultado].sort((a, b) => b.votos - a.votos);
   const maximo = linhas[0]?.votos ?? 0;
-  const empate = maximo > 0 && linhas.filter((l) => l.votos === maximo).length > 1;
+  const empate =
+    maximo > 0 && linhas.filter((l) => l.votos === maximo).length > 1;
   return (
     <section className={t.resultado} aria-label="Resultado">
       <h1 className={t.titulo}>{eleicao.titulo}</h1>
       {linhas.map((l) => {
-        const candidato = eleicao.candidatos.find((c) => c.id === l.candidatoId);
+        const candidato = eleicao.candidatos.find(
+          (c) => c.id === l.candidatoId,
+        );
         const lider = maximo > 0 && l.votos === maximo;
         return (
           <div
@@ -269,9 +274,7 @@ function Resultado({
               <span className={t.linhaNome}>
                 {l.nome}
                 {lider && (
-                  <span
-                    className={`${t.marca} ${empate ? t.marcaEmpate : ""}`}
-                  >
+                  <span className={`${t.marca} ${empate ? t.marcaEmpate : ""}`}>
                     {empate ? "Empate" : "Mais votado"}
                   </span>
                 )}

@@ -37,7 +37,6 @@ const titulo = z.string().trim().min(1, "Informe o título.").max(200);
 const entradaNovaEleicao = z.object({
   empreendimentoId: idBanco,
   titulo,
-  teste: z.boolean(),
 });
 
 export async function criarEleicao(
@@ -63,7 +62,7 @@ export async function criarEleicao(
             usuarioId,
             acao: "eleicao.criar",
             alvo: `eleicao:${el.id}`,
-            dados: { titulo: e.titulo, teste: e.teste },
+            dados: { titulo: e.titulo },
           },
           tx,
         );
@@ -79,9 +78,9 @@ export async function criarEleicao(
   }
 }
 
-const entradaEditarEleicao = z.object({ titulo, teste: z.boolean() });
+const entradaEditarEleicao = z.object({ titulo });
 
-/** Muda o título; a flag `teste` só muda em rascunho (ela libera o zerar). */
+/** Muda o título. */
 export async function editarEleicao(
   id: number,
   entrada: z.input<typeof entradaEditarEleicao>,
@@ -89,18 +88,14 @@ export async function editarEleicao(
 ): Promise<void> {
   const e = validar(entradaEditarEleicao, entrada);
   await db.transaction(async (tx) => {
-    const [el] = await tx
-      .select({ status: eleicao.status, teste: eleicao.teste })
-      .from(eleicao)
+    const feito = await tx
+      .update(eleicao)
+      .set(e)
       .where(eq(eleicao.id, id))
-      .for("update");
-    if (!el) throw new EntradaInvalida("Eleição não encontrada.");
-    if (el.teste !== e.teste && el.status !== "rascunho") {
-      throw new EntradaInvalida(
-        "A marca de eleição de teste só muda enquanto a eleição é rascunho.",
-      );
+      .returning({ id: eleicao.id });
+    if (feito.length === 0) {
+      throw new EntradaInvalida("Eleição não encontrada.");
     }
-    await tx.update(eleicao).set(e).where(eq(eleicao.id, id));
     await registrarAuditoria(
       {
         eleicaoId: id,
@@ -127,7 +122,6 @@ export async function listarEleicoes() {
       titulo: eleicao.titulo,
       codigo: eleicao.codigo,
       status: eleicao.status,
-      teste: eleicao.teste,
       empreendimento: empreendimento.nome,
       votos: sql<number>`coalesce(${votos.total}, 0)`.mapWith(Number),
     })
@@ -144,7 +138,6 @@ export async function buscarEleicao(id: number) {
       titulo: eleicao.titulo,
       codigo: eleicao.codigo,
       status: eleicao.status,
-      teste: eleicao.teste,
       abertaEm: eleicao.abertaEm,
       encerradaEm: eleicao.encerradaEm,
       empreendimentoId: eleicao.empreendimentoId,

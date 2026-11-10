@@ -98,8 +98,14 @@ export const NOME_ACAO: Record<string, string> = {
   "apto.desbloquear": "Apartamento desbloqueado",
   "documento.falha": "Documento não conferiu",
   "empreendimento.criar": "Empreendimento criado",
+  "empreendimento.excluir": "Empreendimento excluído",
   "empreendimento.editar": "Empreendimento editado",
   "importacao.confirmar": "Importação confirmada",
   "sessao.entrar": "Entrou no painel",
   "sessao.sair": "Saiu do painel",
+  // Exclusões feitas direto no banco de produção antes da tela de excluir.
+  "empreendimento.apagar": "Empreendimento excluído",
+  "eleicao.apagar": "Eleição excluída",
+  "usuario.apagar": "Usuário excluído",
+  "usuario.editar": "Usuário editado",
 };

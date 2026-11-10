@@ -42,7 +42,6 @@ async function cabecalho(eleicaoId: number) {
       titulo: eleicao.titulo,
       codigo: eleicao.codigo,
       status: eleicao.status,
-      teste: eleicao.teste,
       abertaEm: eleicao.abertaEm,
       encerradaEm: eleicao.encerradaEm,
       empreendimentoId: eleicao.empreendimentoId,

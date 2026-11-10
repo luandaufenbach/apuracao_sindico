@@ -1,9 +1,9 @@
 // Testes de integração das rotas do godmode: papel conferido no servidor,
-// motivo obrigatório, anular, mover, voto pela mesa, reabrir, zerar,
-// auditoria e usuários, e cada ação listada no relatório. O cookie da sessão
-// fica num pote em memória no lugar do `cookies()` do Next.
+// motivo obrigatório, anular, mover, voto pela mesa, reabrir, excluir
+// empreendimento, auditoria e usuários, e cada ação listada no relatório. O
+// cookie da sessão fica num pote em memória no lugar do `cookies()` do Next.
 import bcrypt from "bcryptjs";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const pote = vi.hoisted(() => new Map<string, string>());
@@ -26,7 +26,7 @@ import { GET as getRelatorio } from "@/app/api/admin/eleicoes/[id]/relatorio/rou
 import { POST as postMesa } from "@/app/api/admin/eleicoes/[id]/voto-mesa/route";
 import { GET as getVotos } from "@/app/api/admin/eleicoes/[id]/votos/route";
 import { GET as getPorDocumento } from "@/app/api/admin/eleicoes/[id]/votos-por-documento/route";
-import { POST as postZerar } from "@/app/api/admin/eleicoes/[id]/zerar/route";
+import { POST as postExcluir } from "@/app/api/admin/empreendimentos/[id]/excluir/route";
 import { GET as getEleicoes } from "@/app/api/admin/eleicoes/route";
 import { POST as postLogin } from "@/app/api/admin/login/route";
 import { POST as postDesativar } from "@/app/api/admin/usuarios/[id]/desativar/route";
@@ -38,7 +38,11 @@ import { POST as postAnular } from "@/app/api/admin/votos/[id]/anular/route";
 import { POST as postMover } from "@/app/api/admin/votos/[id]/mover/route";
 import { db } from "@/db";
 import {
+  apartamento,
+  candidato,
+  comprador,
   eleicao,
+  empreendimento,
   logAuditoria,
   situacaoApartamento,
   usuarioAdmin,
@@ -183,7 +187,15 @@ describe("papel god conferido no servidor", () => {
         getVotos(get(`${e}/votos?apartamentoId=${c.apto.a101}`), naEleicao(c)),
       ),
       ler(postReabrir(post(`${e}/reabrir`, motivo), naEleicao(c))),
-      ler(postZerar(post(`${e}/zerar`, motivo), naEleicao(c))),
+      ler(
+        postExcluir(
+          post(`${BASE}/empreendimentos/${c.empreendimentoId}/excluir`, {
+            ...motivo,
+            confirmacao: `x`,
+          }),
+          params({ id: String(c.empreendimentoId) }),
+        ),
+      ),
       ler(
         postAnular(
           post(`${BASE}/votos/${votoId}/anular`, motivo),
@@ -238,6 +250,12 @@ describe("papel god conferido no servidor", () => {
       .from(usuarioAdmin)
       .where(eq(usuarioAdmin.email, `intruso-${c.eleicaoId}@teste.test`));
     expect(intruso).toHaveLength(0);
+    expect(
+      await db
+        .select()
+        .from(empreendimento)
+        .where(eq(empreendimento.id, c.empreendimentoId)),
+    ).toHaveLength(1);
   });
 
   it("sem sessão, as rotas god respondem 401", async () => {
@@ -543,7 +561,7 @@ describe("votos por documento", () => {
   });
 });
 
-describe("reabrir e zerar", () => {
+describe("reabrir", () => {
   it("reabre só votação encerrada, com motivo", async () => {
     const c = await criarCenario("encerrada");
     await entrarComo(c, "god");
@@ -572,51 +590,95 @@ describe("reabrir e zerar", () => {
       },
     ]);
   });
+});
 
-  it("zera só eleição de teste: apaga votos e tentativas e volta para rascunho", async () => {
+describe("excluir empreendimento", () => {
+  const nomeDe = async (c: Cenario) =>
+    (
+      await db
+        .select({ nome: empreendimento.nome })
+        .from(empreendimento)
+        .where(eq(empreendimento.id, c.empreendimentoId))
+    )[0]?.nome;
+  const excluir = (c: Cenario, corpo: Corpo) =>
+    ler(
+      postExcluir(
+        post(`${BASE}/empreendimentos/${c.empreendimentoId}/excluir`, corpo),
+        params({ id: String(c.empreendimentoId) }),
+      ),
+    );
+
+  it("recusa com voto, mesmo anulado, sem motivo ou com o nome errado", async () => {
     const c = await criarCenario();
-    const anulado = await votarPeloDocumento(c, c.apto.a101, c.doc.a101);
+    const nome = (await nomeDe(c))!;
+    const votoId = await votarPeloDocumento(c, c.apto.a101, c.doc.a101);
+    await entrarComo(c, "god");
+    const motivo = "Cadastro duplicado";
+
+    expect((await excluir(c, { motivo: "", confirmacao: nome })).status).toBe(
+      400,
+    );
+    expect(
+      (await excluir(c, { motivo, confirmacao: "Outro nome" })).status,
+    ).toBe(400);
+    const comVoto = await excluir(c, { motivo, confirmacao: nome });
+    expect(comVoto).toEqual({
+      status: 400,
+      corpo: {
+        mensagem:
+          "O empreendimento tem eleição com votos e não pode ser excluído.",
+      },
+    });
+
+    await ler(
+      postAnular(
+        post(`${BASE}/votos/${votoId}/anular`, { motivo: "Conferência" }),
+        noVoto(votoId),
+      ),
+    );
+    expect((await excluir(c, { motivo, confirmacao: nome })).status).toBe(400);
+    expect(await nomeDe(c)).toBe(nome);
+  });
+
+  it("sem voto, apaga tudo junto e o log fica, desligado da eleição", async () => {
+    const c = await criarCenario();
+    const nome = (await nomeDe(c))!;
+    // Tentativa errada: grava situação e log na eleição, sem voto.
     await verificarDocumento({
       eleicaoId: c.eleicaoId,
       apartamentoId: c.apto.a102,
       documento: c.doc.estranho,
     });
     await entrarComo(c, "god");
-    await ler(
-      postAnular(
-        post(`${BASE}/votos/${anulado}/anular`, { motivo: "Ensaio" }),
-        noVoto(anulado),
-      ),
-    );
-    await votarPeloDocumento(c, c.apto.a101, c.doc.a101);
-    const zerar = () =>
-      ler(
-        postZerar(
-          post(`${BASE}/eleicoes/${c.eleicaoId}/zerar`, {
-            motivo: "Fim do ensaio geral",
-          }),
-          naEleicao(c),
-        ),
-      );
 
-    // Eleição real não zera.
-    await db
-      .update(eleicao)
-      .set({ teste: false })
-      .where(eq(eleicao.id, c.eleicaoId));
-    expect((await zerar()).status).toBe(400);
-    expect(await votosValidos(c, c.apto.a101)).toHaveLength(1);
-    await db
-      .update(eleicao)
-      .set({ teste: true })
-      .where(eq(eleicao.id, c.eleicaoId));
-
-    expect(await zerar()).toEqual({
-      status: 200,
-      corpo: { votosApagados: 2 },
+    const r = await excluir(c, {
+      motivo: "Importado no empreendimento errado",
+      confirmacao: ` ${nome} `,
     });
+    expect(r).toEqual({ status: 200, corpo: { ok: true } });
+
+    const aptoIds = Object.values(c.apto);
+    expect(await nomeDe(c)).toBeUndefined();
     expect(
-      await db.select().from(voto).where(eq(voto.eleicaoId, c.eleicaoId)),
+      await db
+        .select()
+        .from(apartamento)
+        .where(eq(apartamento.empreendimentoId, c.empreendimentoId)),
+    ).toHaveLength(0);
+    expect(
+      await db
+        .select()
+        .from(comprador)
+        .where(inArray(comprador.apartamentoId, aptoIds)),
+    ).toHaveLength(0);
+    expect(
+      await db.select().from(eleicao).where(eq(eleicao.id, c.eleicaoId)),
+    ).toHaveLength(0);
+    expect(
+      await db
+        .select()
+        .from(candidato)
+        .where(eq(candidato.eleicaoId, c.eleicaoId)),
     ).toHaveLength(0);
     expect(
       await db
@@ -624,21 +686,42 @@ describe("reabrir e zerar", () => {
         .from(situacaoApartamento)
         .where(eq(situacaoApartamento.eleicaoId, c.eleicaoId)),
     ).toHaveLength(0);
-    const [el] = await db
-      .select({ status: eleicao.status })
-      .from(eleicao)
-      .where(eq(eleicao.id, c.eleicaoId));
-    expect(el.status).toBe("rascunho");
 
-    // O log fica: o relatório lista o anular e o zerar.
-    expect((await relatorio(c)).acoesGod).toMatchObject([
-      { acao: "voto.anular", motivo: "Ensaio" },
-      {
-        acao: "eleicao.zerar",
-        motivo: "Fim do ensaio geral",
-        detalhe: "2 votos apagados",
-      },
-    ]);
+    const logs = await db
+      .select()
+      .from(logAuditoria)
+      .where(
+        inArray(logAuditoria.alvo, [
+          `apartamento:${c.apto.a102}`,
+          `empreendimento:${c.empreendimentoId}`,
+        ]),
+      );
+    expect(logs).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ acao: "documento.falha", eleicaoId: null }),
+        expect.objectContaining({
+          acao: "empreendimento.excluir",
+          usuarioId: c.godId,
+          motivo: "Importado no empreendimento errado",
+          dados: { nome, apartamentos: 6, compradores: 7, eleicoes: 1 },
+        }),
+      ]),
+    );
+
+    // A exclusão aparece na auditoria, entre as ações de godmode.
+    const auditoria = (
+      await ler(getAuditoria(get(`${BASE}/auditoria?godmode=1`)))
+    ).corpo;
+    expect(
+      auditoria.itens.find(
+        (i: Corpo) => i.alvo === `empreendimento:${c.empreendimentoId}`,
+      ),
+    ).toMatchObject({ acao: "empreendimento.excluir", usuario: "God" });
+
+    // Sem eleição, o log do eleitor não sai sozinho na limpeza do cenário.
+    await db
+      .delete(logAuditoria)
+      .where(eq(logAuditoria.alvo, `apartamento:${c.apto.a102}`));
   });
 });
 

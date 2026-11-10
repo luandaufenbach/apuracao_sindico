@@ -4,7 +4,6 @@ import Link from "next/link";
 import { exigirUsuarioPagina } from "@/lib/auth";
 import { listarEmpreendimentos } from "@/lib/cadastro";
 import { listarEleicoes } from "@/lib/eleicoes";
-import { Selo } from "@/ui/selo";
 
 import estilos from "../admin.module.css";
 import { Cabecalho, SeloStatus } from "../pecas";
@@ -44,7 +43,6 @@ export default async function Eleicoes() {
                       {e.empreendimento} · {e.votos} votos · /v/{e.codigo}
                     </span>
                   </div>
-                  {e.teste && <Selo>Teste</Selo>}
                   <SeloStatus status={e.status} />
                 </div>
               ))}
