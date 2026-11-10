@@ -314,7 +314,7 @@ describe("R5: três documentos que não conferem bloqueiam", () => {
     });
   });
 
-  it("falhas simultâneas sobem o contador sem perder nenhuma", async () => {
+  it("falhas simultâneas sobem o contador sem perder nenhuma e param em 3", async () => {
     const c = await criarCenario();
     const resultados = await Promise.all(
       Array.from({ length: 6 }, () =>
@@ -332,7 +332,11 @@ describe("R5: três documentos que não conferem bloqueiam", () => {
     expect(restantes).toEqual([1, 2]);
     const s = await situacao(c, c.apto.a101);
     expect(s.bloqueado).toBe(true);
-    expect(s.tentativasFalhas).toBeGreaterThanOrEqual(3);
+    // Falha que chega com o apartamento já bloqueado não conta.
+    expect(s.tentativasFalhas).toBe(3);
+    expect(
+      resultados.filter((r) => !r.ok && r.erro === "bloqueado"),
+    ).toHaveLength(4);
   });
 
   it("só operador ou god ativo desbloqueia", async () => {

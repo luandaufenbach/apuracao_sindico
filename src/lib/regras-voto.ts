@@ -247,7 +247,8 @@ export async function verificarDocumento(
 }
 
 // R5: o contador sobe no próprio banco (upsert com incremento), então falhas
-// simultâneas nunca se perdem nem passam do limite sem bloquear.
+// simultâneas nunca se perdem nem passam do limite sem bloquear. Falha que
+// chega com o apartamento já bloqueado não sobe o contador: ele para no limite.
 async function registrarFalha(
   el: EleicaoBase,
   apartamentoId: number,
@@ -267,7 +268,7 @@ async function registrarFalha(
           situacaoApartamento.apartamentoId,
         ],
         set: {
-          tentativasFalhas: sql`${situacaoApartamento.tentativasFalhas} + 1`,
+          tentativasFalhas: sql`case when ${situacaoApartamento.bloqueado} then ${situacaoApartamento.tentativasFalhas} else ${situacaoApartamento.tentativasFalhas} + 1 end`,
           bloqueado: sql`${situacaoApartamento.bloqueado} or ${situacaoApartamento.tentativasFalhas} + 1 >= ${LIMITE_TENTATIVAS}`,
         },
       })
