@@ -66,7 +66,7 @@ Página pública, só com dados agregados. Mostra o QR code do link de voto, o t
 - **Eleições**: criar (título, empreendimento). Candidatos com nome, apartamento (opcional), foto redimensionada para 400 px, proposta de até 300 caracteres e ordem de exibição.
 - **Status**: `rascunho` → `aberta` → `encerrada` → `publicada`, com os botões Abrir votação, Encerrar e Publicar resultado.
 - **Painel ao vivo** (`painel`): contadores (votaram, faltam, bloqueados), grade de apartamentos colorida por situação, lista dos apartamentos que só votam pela mesa e últimos votos (apartamento, nome de quem votou, horário, origem). O candidato escolhido não aparece aqui. Apartamento bloqueado tem o botão Desbloquear, que zera as tentativas.
-- **Relatório** (`relatorio`): página para imprimir ou salvar em PDF com empreendimento, eleição, horários de abertura e encerramento, total de apartamentos, apartamentos que votaram, votos por candidato, vencedor, lista de apartamentos que votaram (horário e origem) e espaço para assinaturas.
+- **Relatório** (`relatorio`): página para imprimir ou salvar em PDF com empreendimento, eleição, horários de abertura e encerramento, total de apartamentos, apartamentos que votaram, votos por candidato, vencedor, lista de apartamentos que votaram (apartamento e horário) e espaço para assinaturas.
 
 ## Planilha "Controle de Vendas" (modelo padrão de importação)
 

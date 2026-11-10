@@ -6,7 +6,7 @@ import { exigirUsuarioPagina } from "@/lib/auth";
 import { idBanco } from "@/lib/erros";
 import { dadosRelatorio } from "@/lib/painel";
 
-import { contar, dataHora, NOME_ORIGEM, NOME_STATUS } from "../../../formato";
+import { contar, dataHora, NOME_STATUS } from "../../../formato";
 import { Imprimir } from "./imprimir";
 import estilos from "./relatorio.module.css";
 
@@ -123,7 +123,6 @@ export default async function Relatorio({
                 <tr>
                   <th>Apartamento</th>
                   <th>Horário</th>
-                  <th>Origem</th>
                 </tr>
               </thead>
               <tbody>
@@ -133,7 +132,6 @@ export default async function Relatorio({
                       {v.bloco}, {v.rotulo}
                     </td>
                     <td className={estilos.mono}>{dataHora(v.horario)}</td>
-                    <td>{NOME_ORIGEM[v.origem]}</td>
                   </tr>
                 ))}
               </tbody>

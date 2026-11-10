@@ -303,7 +303,7 @@ export function Mesa({
           </Campo>
           <Campo
             rotulo="Motivo"
-            dica="Ex.: permuta sem documento no cadastro. Fica no log e no relatório."
+            dica="Ex.: permuta sem documento no cadastro. Fica no log de auditoria."
           >
             <textarea
               className={estilos.controle}
