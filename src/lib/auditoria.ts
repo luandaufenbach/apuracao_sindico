@@ -6,7 +6,7 @@ import { logAuditoria } from "@/db/schema";
 import { idBanco, validar } from "./erros";
 
 /**
- * Ações de godmode: exigem usuário e motivo (R8) e aparecem no relatório final.
+ * Ações de godmode: exigem usuário e motivo (R8) e aparecem na auditoria.
  * As demais ações de operador também gravam log, com motivo opcional.
  */
 export const ACOES_GOD = [

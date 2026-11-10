@@ -80,7 +80,7 @@ export function Godmode({
           </>
         }
         titulo="Godmode"
-        sub={`${eleicao.empreendimento}. Toda ação pede motivo, que fica no log de auditoria e no relatório final.`}
+        sub={`${eleicao.empreendimento}. Toda ação pede motivo, que fica no log de auditoria.`}
         acoes={
           <>
             <LinkBotao

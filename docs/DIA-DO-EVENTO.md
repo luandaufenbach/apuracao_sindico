@@ -127,4 +127,4 @@ O plano B mantém a votação andando se o app ficar inacessível no local. Os v
 9. **Se o sistema não voltar no dia:** conte as cédulas na frente de testemunhas e registre a contagem em ata. Quando o sistema voltar, lance as cédulas como no passo 6, encerre, publique o resultado e anexe o relatório à ata.
 10. **Guarde** as cédulas, os canhotos e a folha de ocorrências lacrados junto com a ata.
 
-O relatório final lista cada voto pela mesa com o motivo. Assim, toda cédula de papel lançada fica registrada.
+O relatório final marca cada voto pela mesa na lista de apartamentos, e a auditoria do godmode guarda o motivo de cada um. Assim, toda cédula de papel lançada fica registrada.

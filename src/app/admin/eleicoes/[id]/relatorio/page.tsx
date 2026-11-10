@@ -6,13 +6,7 @@ import { exigirUsuarioPagina } from "@/lib/auth";
 import { idBanco } from "@/lib/erros";
 import { dadosRelatorio } from "@/lib/painel";
 
-import {
-  contar,
-  dataHora,
-  NOME_ACAO,
-  NOME_ORIGEM,
-  NOME_STATUS,
-} from "../../../formato";
+import { contar, dataHora, NOME_ORIGEM, NOME_STATUS } from "../../../formato";
 import { Imprimir } from "./imprimir";
 import estilos from "./relatorio.module.css";
 
@@ -116,41 +110,6 @@ export default async function Relatorio({
             </p>
           </section>
         )}
-
-        <section className={estilos.secao}>
-          <h2 className={estilos.secaoTitulo}>Ações de godmode</h2>
-          {r.acoesGod.length === 0 ? (
-            <p className={estilos.texto}>Nenhuma ação de godmode.</p>
-          ) : (
-            <table className={estilos.tabela}>
-              <thead>
-                <tr>
-                  <th>Horário</th>
-                  <th>Ação</th>
-                  <th>Usuário</th>
-                  <th>Motivo</th>
-                </tr>
-              </thead>
-              <tbody>
-                {r.acoesGod.map((a) => (
-                  <tr key={a.id}>
-                    <td className={estilos.mono}>{dataHora(a.criadoEm)}</td>
-                    <td>
-                      {NOME_ACAO[a.acao] ?? a.acao}
-                      {(a.detalhe ?? a.alvo) && (
-                        <span className={estilos.alvo}>
-                          {a.detalhe ?? a.alvo}
-                        </span>
-                      )}
-                    </td>
-                    <td>{a.usuario ?? "—"}</td>
-                    <td>{a.motivo}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </section>
 
         <section className={estilos.secao}>
           <h2 className={estilos.secaoTitulo}>

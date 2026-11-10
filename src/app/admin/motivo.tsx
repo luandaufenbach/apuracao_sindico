@@ -11,8 +11,8 @@ import { Alerta, Campo } from "./pecas";
 
 /**
  * Diálogo das ações de godmode (R8): o motivo é obrigatório e vai para o log
- * de auditoria e o relatório. Fica aberto enquanto montado; quem abre
- * desmonta ao fechar, e o motivo começa vazio a cada vez.
+ * de auditoria. Fica aberto enquanto montado; quem abre desmonta ao fechar, e
+ * o motivo começa vazio a cada vez.
  */
 export function DialogoMotivo({
   titulo,
@@ -82,10 +82,7 @@ export function DialogoMotivo({
         {children}
         <Campo
           rotulo="Motivo"
-          dica={
-            dicaMotivo ??
-            "Obrigatório. Fica no log de auditoria e no relatório final."
-          }
+          dica={dicaMotivo ?? "Obrigatório. Fica no log de auditoria."}
         >
           <textarea
             className={estilos.controle}

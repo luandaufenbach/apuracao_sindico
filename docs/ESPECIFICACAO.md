@@ -22,7 +22,7 @@ Nomes de domínio em português sem acento (`apartamento`, `eleicao`, `voto`).
 | Operador (admin) | Login, papel `operador` | Cadastros, importação da planilha, candidatos, abrir/encerrar votação, painel ao vivo, desbloquear apartamento, telão, relatório |
 | God (godmode) | Login, papel `god` | Tudo do operador, mais: voto pela mesa, votos por documento, anular voto, mover voto, reabrir votação, excluir empreendimento, auditoria, usuários |
 
-Toda ação de operador ou god grava em `log_auditoria`. Ação de godmode exige motivo e aparece no relatório final.
+Toda ação de operador ou god grava em `log_auditoria`. Ação de godmode exige motivo e aparece na auditoria do godmode.
 
 ### Quem vê o quê
 
@@ -66,7 +66,7 @@ Página pública, só com dados agregados. Mostra o QR code do link de voto, o t
 - **Eleições**: criar (título, empreendimento). Candidatos com nome, apartamento (opcional), foto redimensionada para 400 px, proposta de até 300 caracteres e ordem de exibição.
 - **Status**: `rascunho` → `aberta` → `encerrada` → `publicada`, com os botões Abrir votação, Encerrar e Publicar resultado.
 - **Painel ao vivo** (`painel`): contadores (votaram, faltam, bloqueados), grade de apartamentos colorida por situação, lista dos apartamentos que só votam pela mesa e últimos votos (apartamento, nome de quem votou, horário, origem). O candidato escolhido não aparece aqui. Apartamento bloqueado tem o botão Desbloquear, que zera as tentativas.
-- **Relatório** (`relatorio`): página para imprimir ou salvar em PDF com empreendimento, eleição, horários de abertura e encerramento, total de apartamentos, apartamentos que votaram, votos por candidato, vencedor, lista de apartamentos que votaram, ações de godmode com motivo e espaço para assinaturas.
+- **Relatório** (`relatorio`): página para imprimir ou salvar em PDF com empreendimento, eleição, horários de abertura e encerramento, total de apartamentos, apartamentos que votaram, votos por candidato, vencedor, lista de apartamentos que votaram (horário e origem) e espaço para assinaturas.
 
 ## Planilha "Controle de Vendas" (modelo padrão de importação)
 
